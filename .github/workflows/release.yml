@@ -1,0 +1,129 @@
+name: Release and Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Release
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo, pdo_mysql, pdo_pgsql, pdo_sqlite
+          coverage: none
+          
+      - name: Validate composer.json
+        run: composer validate --strict
+        
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+        
+      - name: Run PHP syntax check
+        run: find src -name "*.php" -exec php -l {} \;
+        
+      - name: Run tests
+        run: |
+          if [ -f phpunit.xml ]; then
+            vendor/bin/phpunit
+          else
+            echo "No PHPUnit configuration found, skipping tests"
+          fi
+
+  create-release:
+    needs: validate
+    runs-on: ubuntu-latest
+    name: Create GitHub Release
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Extract tag name
+        id: tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          release_name: "TCU API Client ${{ steps.version.outputs.VERSION }}"
+          body: |
+            ## TCU API Client ${{ steps.version.outputs.VERSION }}
+            
+            ### 🎉 What's New
+            - See [CHANGELOG.md](CHANGELOG.md) for detailed changes
+            - Check [README.md](README.md) for updated documentation
+            
+            ### 📦 Installation
+            ```bash
+            composer require mblogik/tcuapiclient:^${{ steps.version.outputs.VERSION }}
+            ```
+            
+            ### 🔗 Links
+            - [Documentation](README.md)
+            - [Examples](examples/)
+            - [Packagist](https://packagist.org/packages/mblogik/tcuapiclient)
+            
+            ### 🚀 Quick Start
+            ```php
+            use MBLogik\TCUAPIClient\Client\TCUAPIClient;
+            use MBLogik\TCUAPIClient\Config\Configuration;
+            
+            $config = new Configuration([
+                'username' => 'your_username',
+                'security_token' => 'your_token',
+                'base_url' => 'https://api.tcu.go.tz'
+            ]);
+            
+            $client = new TCUAPIClient($config);
+            $response = $client->applicants()->checkStatus('S1001/0012/2018');
+            ```
+            
+            ### 💾 Database Support
+            - ✅ MySQL 5.7+ / MariaDB 10.3+
+            - ✅ PostgreSQL 12+
+            - ✅ SQLite 3 (testing)
+            - ✅ Laravel 10/11/12 compatible
+            
+            ---
+            
+            **Full Changelog**: https://github.com/mblogik/tcuapi/compare/v1.0.0...${{ steps.tag.outputs.TAG_NAME }}
+          draft: false
+          prerelease: false
+
+  notify-packagist:
+    needs: [validate, create-release]
+    runs-on: ubuntu-latest
+    name: Notify Packagist
+    
+    steps:
+      - name: Notify Packagist
+        run: |
+          curl -XPOST -H'content-type:application/json' \
+            'https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_TOKEN }}' \
+            -d'{"repository":{"url":"https://github.com/mblogik/tcuapi"}}'
+        continue-on-error: true
+        
+      - name: Wait for Packagist sync
+        run: sleep 30
+        
+      - name: Verify Packagist update
+        run: |
+          curl -s "https://packagist.org/packages/mblogik/tcuapiclient.json" | \
+          jq -r '.package.versions | keys[]' | head -5

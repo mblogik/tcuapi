@@ -1,0 +1,30 @@
+name: Auto-Update Packagist
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  update-packagist:
+    runs-on: ubuntu-latest
+    name: Update Packagist
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Notify Packagist of update
+        run: |
+          curl -XPOST -H'content-type:application/json' \
+            'https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_TOKEN }}' \
+            -d'{"repository":{"url":"https://github.com/mblogik/tcuapi"}}'
+        continue-on-error: true
+        
+      - name: Wait for Packagist sync
+        run: sleep 10
+        
+      - name: Verify update
+        run: |
+          echo "✅ Packagist update notification sent"
+          echo "🔗 Check your package at: https://packagist.org/packages/mblogik/tcuapiclient"

@@ -1,0 +1,149 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: ['8.0', '8.1', '8.2', '8.3']
+        database: ['mysql', 'pgsql', 'sqlite']
+        laravel: ['10.0', '11.0']
+        
+    name: PHP ${{ matrix.php-version }} - DB ${{ matrix.database }} - Laravel ${{ matrix.laravel }}
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: tcu_api_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+          
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: tcu_api_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, curl, json
+          coverage: xdebug
+          
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+          
+      - name: Install dependencies
+        run: |
+          composer require "illuminate/database:^${{ matrix.laravel }}" --no-update
+          composer install --prefer-dist --no-progress --no-suggest
+          
+      - name: Setup database
+        run: |
+          if [ "${{ matrix.database }}" = "mysql" ]; then
+            mysql -h 127.0.0.1 -u root -ppassword -e "CREATE DATABASE IF NOT EXISTS tcu_api_test;"
+          elif [ "${{ matrix.database }}" = "pgsql" ]; then
+            PGPASSWORD=password psql -h 127.0.0.1 -U postgres -d postgres -c "CREATE DATABASE tcu_api_test;"
+          fi
+          
+      - name: Run PHP syntax check
+        run: find src -name "*.php" -exec php -l {} \;
+        
+      - name: Run migrations
+        run: |
+          export DB_DRIVER=${{ matrix.database }}
+          if [ "${{ matrix.database }}" = "mysql" ]; then
+            export DB_HOST=127.0.0.1
+            export DB_PORT=3306
+            export DB_USERNAME=root
+            export DB_PASSWORD=password
+          elif [ "${{ matrix.database }}" = "pgsql" ]; then
+            export DB_HOST=127.0.0.1
+            export DB_PORT=5432
+            export DB_USERNAME=postgres
+            export DB_PASSWORD=password
+          elif [ "${{ matrix.database }}" = "sqlite" ]; then
+            export DB_DATABASE=":memory:"
+          fi
+          export DB_DATABASE=tcu_api_test
+          php migrate.php migrate
+          
+      - name: Run tests
+        run: |
+          if [ -f phpunit.xml ]; then
+            vendor/bin/phpunit --coverage-text
+          else
+            echo "No PHPUnit configuration found, skipping tests"
+          fi
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: matrix.php-version == '8.1' && matrix.database == 'mysql'
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo, pdo_mysql, pdo_pgsql, pdo_sqlite
+          coverage: none
+          
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+        
+      - name: Run PHP CodeSniffer
+        run: |
+          if [ -f vendor/bin/phpcs ]; then
+            vendor/bin/phpcs src --standard=PSR12
+          else
+            echo "PHP CodeSniffer not found, skipping code style check"
+          fi
+          
+      - name: Run PHPStan
+        run: |
+          if [ -f vendor/bin/phpstan ]; then
+            vendor/bin/phpstan analyse src --level=5
+          else
+            echo "PHPStan not found, skipping static analysis"
+          fi
