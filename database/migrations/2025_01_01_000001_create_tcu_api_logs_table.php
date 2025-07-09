@@ -28,8 +28,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'completed', 'error', 'timeout'])->default('pending')->index();
             $table->text('error_message')->nullable();
             $table->string('request_id', 100)->nullable()->unique();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
             
             // Composite indexes for common queries
             $table->index(['endpoint', 'created_at']);

@@ -18,12 +18,11 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->integer('requests_count')->default(1);
             $table->integer('requests_limit')->default(100);
-            $table->timestamp('window_start')->useCurrent();
+            $table->timestamp('window_start');
             $table->timestamp('window_end')->index();
             $table->boolean('is_blocked')->default(false)->index();
             $table->timestamp('blocked_until')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
             
             // Composite indexes for rate limiting queries
             $table->index(['username', 'endpoint', 'window_end']);

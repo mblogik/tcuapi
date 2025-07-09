@@ -36,28 +36,68 @@ class DatabaseConfig
         $this->driver = $config['driver'] ?? 'mysql';
         $this->host = $config['host'] ?? '127.0.0.1';
         $this->database = $config['database'] ?? 'tcu_api_logs';
-        $this->username = $config['username'] ?? 'root';
+        $this->username = $config['username'] ?? ($this->driver === 'pgsql' ? 'postgres' : 'root');
         $this->password = $config['password'] ?? '';
-        $this->port = $config['port'] ?? 3306;
-        $this->charset = $config['charset'] ?? 'utf8mb4';
+        
+        // Set default port based on driver
+        $defaultPort = match($this->driver) {
+            'pgsql' => 5432,
+            'mysql' => 3306,
+            'sqlite' => null,
+            default => 3306
+        };
+        $this->port = $config['port'] ?? $defaultPort;
+        
+        // Set default charset based on driver
+        $defaultCharset = match($this->driver) {
+            'pgsql' => 'utf8',
+            'mysql' => 'utf8mb4',
+            'sqlite' => 'utf8',
+            default => 'utf8mb4'
+        };
+        $this->charset = $config['charset'] ?? $defaultCharset;
+        
         $this->tablePrefix = $config['table_prefix'] ?? 'tcu_api_';
     }
     
     public function toArray(): array
     {
-        return [
+        $config = [
             'driver' => $this->driver,
             'host' => $this->host,
-            'port' => $this->port,
             'database' => $this->database,
             'username' => $this->username,
             'password' => $this->password,
             'charset' => $this->charset,
-            'collation' => $this->charset . '_unicode_ci',
             'prefix' => $this->tablePrefix,
             'strict' => true,
-            'engine' => null,
         ];
+        
+        // Add port only if not null (for SQLite compatibility)
+        if ($this->port !== null) {
+            $config['port'] = $this->port;
+        }
+        
+        // Add driver-specific configurations
+        switch ($this->driver) {
+            case 'mysql':
+                $config['collation'] = $this->charset . '_unicode_ci';
+                $config['engine'] = null;
+                break;
+                
+            case 'pgsql':
+                $config['schema'] = 'public';
+                $config['sslmode'] = 'prefer';
+                break;
+                
+            case 'sqlite':
+                // For SQLite, database is the file path
+                $config['database'] = $this->database;
+                unset($config['host'], $config['username'], $config['password']);
+                break;
+        }
+        
+        return $config;
     }
     
     public function getDriver(): string

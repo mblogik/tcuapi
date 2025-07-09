@@ -216,6 +216,167 @@ $client->applicants()->resubmit($applicantData);
 $client->applicants()->submitProgrammeChoices($applicantData);
 ```
 
+## 🎯 Structured Response Objects
+
+The TCU API Client returns structured response objects instead of raw arrays, providing **IDE autocompletion**, **type safety**, and **developer-friendly methods**:
+
+### Check Status Response
+
+```php
+use MBLogik\TCUAPIClient\Models\Response\CheckStatusTcuResponse;
+
+/** @var CheckStatusTcuResponse $response */
+$response = $client->applicants()->checkStatus('S1001/0012/2018');
+
+// IDE provides autocompletion for all these methods:
+if ($response->isSuccess() && $response->isEligible()) {
+    echo "Current State: " . $response->getCurrentState();
+    
+    if ($response->hasAdmission()) {
+        echo "Programme: " . $response->getProgrammeCode();
+        echo "Status: " . ($response->isConfirmed() ? 'Confirmed' : 'Provisional');
+    }
+}
+
+// Easy conversion for external systems
+$summary = $response->getStatusSummary();
+$json = $response->toJson();
+```
+
+### Dashboard Populate Response
+
+```php
+use MBLogik\TCUAPIClient\Models\Response\DashboardPopulateTcuResponse;
+
+/** @var DashboardPopulateTcuResponse $response */
+$response = $client->dashboard()->populate('DM038', 45, 60);
+
+if ($response->isOperationComplete()) {
+    echo "Total: " . $response->getTotalCount();
+    echo "Gender Balance: " . $response->getGenderBalanceStatus();
+    echo "Male %: " . $response->getMalePercentage();
+    
+    if ($response->hasGenderImbalance()) {
+        echo "⚠️ Gender imbalance detected";
+    }
+}
+```
+
+### Admitted Applicants Response
+
+```php
+use MBLogik\TCUAPIClient\Models\Response\AdmittedApplicantTcuResponse;
+
+/** @var AdmittedApplicantTcuResponse[] $applicants */
+$applicants = $client->admissions()->getAdmitted('DM023');
+
+foreach ($applicants as $applicant) {
+    echo $applicant->getF4IndexNo() . ": " . $applicant->getAdmissionStatus();
+    echo "Contact: " . $applicant->getFormattedMobileNumber();
+    
+    if ($applicant->isProvisionalAdmission()) {
+        echo "⏳ Awaiting confirmation";
+    }
+}
+
+// Easy filtering and analysis
+$provisional = array_filter($applicants, fn($a) => $a->isProvisionalAdmission());
+$emails = array_map(fn($a) => $a->getEmailAddress(), $applicants);
+```
+
+### Benefits of Structured Responses
+
+✅ **IDE Support**: Full IntelliSense with method suggestions and documentation  
+✅ **Type Safety**: Catch errors at development time, not runtime  
+✅ **Helper Methods**: Built-in convenience methods for common operations  
+✅ **Data Validation**: Built-in validation and type checking  
+✅ **Easy Testing**: Simplified mocking and unit testing  
+✅ **External Integration**: Clean conversion to arrays/JSON
+
+## 🗄️ Multi-Database Support
+
+The TCU API Client supports **MySQL**, **PostgreSQL**, and **SQLite** databases with **Laravel 10-12 compatibility**:
+
+### Supported Databases
+
+✅ **MySQL 5.7+ / MariaDB 10.3+**  
+✅ **PostgreSQL 12+**  
+✅ **SQLite 3** (for testing)  
+✅ **Laravel 10/11/12 Compatible**
+
+### Database Configuration Examples
+
+```php
+// MySQL Configuration
+$config = new Configuration([
+    'database_config' => [
+        'driver' => 'mysql',
+        'host' => 'localhost',
+        'port' => 3306,
+        'database' => 'tcu_api_logs',
+        'username' => 'root',
+        'password' => 'password',
+        'charset' => 'utf8mb4'
+    ]
+]);
+
+// PostgreSQL Configuration
+$config = new Configuration([
+    'database_config' => [
+        'driver' => 'pgsql',
+        'host' => 'localhost',
+        'port' => 5432,
+        'database' => 'tcu_api_logs',
+        'username' => 'postgres',
+        'password' => 'password',
+        'charset' => 'utf8'
+    ]
+]);
+
+// SQLite Configuration (Testing)
+$config = new Configuration([
+    'database_config' => [
+        'driver' => 'sqlite',
+        'database' => '/path/to/database.sqlite'
+    ]
+]);
+```
+
+### Laravel Integration
+
+The package is fully compatible with Laravel 10, 11, and 12:
+
+```php
+// config/database.php
+'connections' => [
+    'tcu_logs' => [
+        'driver' => env('TCU_DB_DRIVER', 'mysql'),
+        'host' => env('TCU_DB_HOST', '127.0.0.1'),
+        'port' => env('TCU_DB_PORT', '3306'),
+        'database' => env('TCU_DB_DATABASE', 'tcu_logs'),
+        'username' => env('TCU_DB_USERNAME', 'forge'),
+        'password' => env('TCU_DB_PASSWORD', ''),
+        'prefix' => 'tcu_api_',
+    ],
+],
+```
+
+### Docker Support
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: tcu_api_logs
+      POSTGRES_USER: tcu_user
+      POSTGRES_PASSWORD: secure_password
+    ports:
+      - "5432:5432"
+```
+
 ## Database Logging
 
 The library provides comprehensive database logging for all API calls:
@@ -490,6 +651,9 @@ Check the `examples/` directory for comprehensive usage examples:
 - **[Session7_ForeignApplicants_Usage.php](examples/Session7_ForeignApplicants_Usage.php)**: Detailed foreign applicant examples with validation
 
 ### 🏗️ **Advanced Usage**
+- **[StructuredResponses_Usage.php](examples/StructuredResponses_Usage.php)**: Structured response objects with IDE support
+- **[AdmittedApplicants_Usage.php](examples/AdmittedApplicants_Usage.php)**: Working with admitted applicant response objects
+- **[Database_Configuration_Examples.php](examples/Database_Configuration_Examples.php)**: Multi-database setup (MySQL, PostgreSQL, SQLite)
 - **[foreign_applicants.php](examples/foreign_applicants.php)**: Foreign applicant processing and management
 - **[migrations_example.php](examples/migrations_example.php)**: Database setup and migrations
 

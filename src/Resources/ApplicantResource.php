@@ -31,6 +31,9 @@ use MBLogik\TCUAPIClient\Xml\RequestBuilder;
 use MBLogik\TCUAPIClient\Xml\ResponseParser;
 use MBLogik\TCUAPIClient\Utils\ValidationHelper;
 use MBLogik\TCUAPIClient\Exceptions\ValidationException;
+use MBLogik\TCUAPIClient\Models\Response\CheckStatusTcuResponse;
+use MBLogik\TCUAPIClient\Models\Response\AddApplicantTcuResponse;
+use MBLogik\TCUAPIClient\Models\Response\SubmitProgrammeTcuResponse;
 
 class ApplicantResource extends BaseResource
 {
@@ -43,9 +46,9 @@ class ApplicantResource extends BaseResource
      * admitted applicant (subsequent rounds after first round)
      * 
      * @param string|array $f4indexno Single F4 index number or array of multiple F4 index numbers
-     * @return array
+     * @return CheckStatusTcuResponse|CheckStatusTcuResponse[]
      */
-    public function checkStatus($f4indexno): array
+    public function checkStatus($f4indexno)
     {
         // Handle both single and multiple F4 index numbers
         if (is_string($f4indexno)) {
@@ -76,7 +79,59 @@ class ApplicantResource extends BaseResource
             $requestParameters['f4indexno'] = $f4indexNumbers;
         }
         
-        return $this->client->makeRequest('/applicants/checkStatus', $requestParameters);
+        // Make API request
+        $response = $this->client->makeRequest('/applicants/checkStatus', $requestParameters);
+        
+        // Convert response to structured objects
+        return $this->parseCheckStatusResponse($response, $f4indexNumbers);
+    }
+    
+    /**
+     * Parse check status response into structured objects
+     * 
+     * @param array $response Raw API response
+     * @param array $f4indexNumbers Original F4 index numbers requested
+     * @return CheckStatusTcuResponse|CheckStatusTcuResponse[]
+     */
+    private function parseCheckStatusResponse(array $response, array $f4indexNumbers)
+    {
+        $results = [];
+        
+        // Handle response structure
+        if (isset($response['ResponseParameters'])) {
+            $responseData = $response['ResponseParameters'];
+            
+            // Check if multiple responses
+            if (count($f4indexNumbers) > 1) {
+                // Multiple responses expected
+                if (isset($responseData[0])) {
+                    // Array of responses
+                    foreach ($responseData as $data) {
+                        $results[] = new CheckStatusTcuResponse($data);
+                    }
+                } else {
+                    // Single response for multiple request - create for each F4
+                    foreach ($f4indexNumbers as $f4index) {
+                        $data = $responseData;
+                        $data['f4indexno'] = $f4index;
+                        $results[] = new CheckStatusTcuResponse($data);
+                    }
+                }
+            } else {
+                // Single response
+                $results[] = new CheckStatusTcuResponse($responseData);
+            }
+        } else {
+            // Fallback: create response objects from raw data
+            foreach ($f4indexNumbers as $f4index) {
+                $data = $response;
+                $data['f4indexno'] = $f4index;
+                $results[] = new CheckStatusTcuResponse($data);
+            }
+        }
+        
+        // Return single object or array based on input
+        return count($f4indexNumbers) === 1 ? $results[0] : $results;
     }
     
     /**

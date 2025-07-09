@@ -21,6 +21,7 @@ namespace MBLogik\TCUAPIClient\Resources;
 
 use MBLogik\TCUAPIClient\Utils\ValidationHelper;
 use MBLogik\TCUAPIClient\Exceptions\ValidationException;
+use MBLogik\TCUAPIClient\Models\Response\DashboardPopulateTcuResponse;
 
 class DashboardResource extends BaseResource
 {
@@ -34,9 +35,9 @@ class DashboardResource extends BaseResource
      * @param string $programmeCode Programme code (e.g., DM038)
      * @param int $males Number of male applicants
      * @param int $females Number of female applicants
-     * @return array
+     * @return DashboardPopulateTcuResponse
      */
-    public function populate(string $programmeCode, int $males, int $females): array
+    public function populate(string $programmeCode, int $males, int $females): DashboardPopulateTcuResponse
     {
         // Validate programme code format (allows both UD and DM prefixes)
         if (!preg_match('/^[A-Z]{2}[0-9]{3}$/', $programmeCode)) {
@@ -59,7 +60,11 @@ class DashboardResource extends BaseResource
             'Females' => (string)$females
         ];
         
-        return $this->client->makeRequest('/dashboard/populate', $requestParameters);
+        // Make API request
+        $response = $this->client->makeRequest('/dashboard/populate', $requestParameters);
+        
+        // Return structured response object
+        return new DashboardPopulateTcuResponse($response['ResponseParameters'] ?? $response, $males, $females);
     }
     
     /**

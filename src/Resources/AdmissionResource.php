@@ -22,6 +22,7 @@ namespace MBLogik\TCUAPIClient\Resources;
 use MBLogik\TCUAPIClient\Utils\ValidationHelper;
 use MBLogik\TCUAPIClient\Exceptions\ValidationException;
 use MBLogik\TCUAPIClient\Models\Response\AdmittedApplicantTcuResponse;
+use MBLogik\TCUAPIClient\Models\Response\ConfirmAdmissionTcuResponse;
 
 class AdmissionResource extends BaseResource
 {
@@ -34,9 +35,9 @@ class AdmissionResource extends BaseResource
      * 
      * @param string $f4indexno Form four index number
      * @param string $confirmationCode TCU provided confirmation code
-     * @return array
+     * @return ConfirmAdmissionTcuResponse
      */
-    public function confirm(string $f4indexno, string $confirmationCode): array
+    public function confirm(string $f4indexno, string $confirmationCode): ConfirmAdmissionTcuResponse
     {
         // Validate input
         $errors = [];
@@ -59,7 +60,13 @@ class AdmissionResource extends BaseResource
             'ConfirmationCode' => $confirmationCode
         ];
         
-        return $this->client->makeRequest('/admission/confirm', $requestParameters);
+        // Make API request
+        $response = $this->client->makeRequest('/admission/confirm', $requestParameters);
+        
+        // Return structured response object
+        $responseData = $response['ResponseParameters'] ?? $response;
+        $responseData['ConfirmationCode'] = $confirmationCode; // Include original confirmation code
+        return new ConfirmAdmissionTcuResponse($responseData);
     }
     
     /**

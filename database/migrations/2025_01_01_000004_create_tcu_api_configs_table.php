@@ -21,8 +21,7 @@ return new class extends Migration
             $table->boolean('is_encrypted')->default(false);
             $table->boolean('is_active')->default(true)->index();
             $table->integer('sort_order')->default(0);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
             
             $table->index(['group', 'is_active']);
         });
