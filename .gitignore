@@ -1,0 +1,421 @@
+# TCU API Client - Git Ignore File
+#
+# Comprehensive .gitignore file for the TCU API Client PHP package
+#
+# @package    MBLogik\TCUAPIClient
+# @author     Ombeni Aidani <developer@mblogik.com>
+# @company    MBLogik
+# @date       2025-01-09
+# @version    1.0.0
+# @license    MIT
+
+##############################################################################
+# AI ASSISTANT FILES
+##############################################################################
+# Claude AI files and directories
+.claude/
+.claude-*
+claude_*
+.anthropic/
+anthropic_*
+CLAUDE.md
+# Other AI assistant files
+.openai/
+.chatgpt/
+.copilot/
+.ai-assistant/
+
+##############################################################################
+# COMPOSER DEPENDENCIES
+##############################################################################
+/vendor/
+composer.lock
+composer.phar
+
+##############################################################################
+# ENVIRONMENT AND CONFIGURATION FILES
+##############################################################################
+.env
+.env.local
+.env.production
+.env.staging
+.env.testing
+.env.*.local
+.env.*.production
+.env.*.staging
+.env.*.testing
+
+# Configuration files with sensitive data
+config/database.php
+config/api_credentials.php
+config/secrets.php
+src/Config/secrets.php
+
+##############################################################################
+# CREDENTIALS AND SECURITY
+##############################################################################
+# API Keys and Tokens
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+api_keys.txt
+credentials.json
+secrets.json
+session_tokens.txt
+
+# TCU API specific credentials
+tcu_api_credentials.json
+tcu_session_tokens.txt
+tcu_api_config.php
+
+##############################################################################
+# DATABASE FILES
+##############################################################################
+# SQLite databases
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# Database dumps and backups
+*.sql
+*.dump
+database_backup_*
+db_dump_*
+
+# Migration status files
+.migration_status
+migration_lock
+
+##############################################################################
+# LOG FILES
+##############################################################################
+# Application logs
+logs/
+log/
+*.log
+*.log.*
+error.log
+access.log
+debug.log
+api_calls.log
+
+# TCU API specific logs
+tcu_api_*.log
+api_requests_*.log
+database_queries.log
+
+##############################################################################
+# CACHE AND TEMPORARY FILES
+##############################################################################
+# Cache directories
+cache/
+tmp/
+temp/
+storage/cache/
+var/cache/
+
+# Session files
+storage/sessions/
+var/sessions/
+sessions/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+.cache/
+
+# PHP Cache
+opcache/
+.opcache/
+
+##############################################################################
+# IDE AND EDITOR FILES
+##############################################################################
+# PhpStorm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+.sublime-*
+
+# NetBeans
+nbproject/
+.nb-gradle/
+
+# Eclipse
+.project
+.buildpath
+.settings/
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+##############################################################################
+# OPERATING SYSTEM FILES
+##############################################################################
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+##############################################################################
+# TESTING AND COVERAGE
+##############################################################################
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+/tests/coverage/
+coverage/
+clover.xml
+coverage.xml
+coverage.clover
+
+# Test output
+test_output/
+test_results/
+test_reports/
+
+# Mock data and fixtures
+tests/fixtures/generated/
+tests/mock_data/
+
+##############################################################################
+# BUILD AND DEPLOYMENT
+##############################################################################
+# Build artifacts
+build/
+dist/
+release/
+.build/
+
+# Deployment files
+deploy.php
+deployment_config.php
+.deployment
+
+# CI/CD
+.github/workflows/secrets/
+.gitlab-ci-local/
+
+##############################################################################
+# DOCUMENTATION AND REPORTS
+##############################################################################
+# Generated documentation
+docs/generated/
+documentation/api/
+apidoc/
+phpdoc/
+
+# Reports
+reports/
+metrics/
+
+##############################################################################
+# PACKAGE MANAGEMENT
+##############################################################################
+# NPM (if using for any frontend assets)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Bower
+bower_components/
+
+##############################################################################
+# VERSION CONTROL
+##############################################################################
+# Git
+.git/
+.gitattributes
+
+# SVN
+.svn/
+
+# Mercurial
+.hg/
+.hgignore
+
+##############################################################################
+# SECURITY SCANNING
+##############################################################################
+# Security scan results
+security_scan_results/
+vulnerability_reports/
+.security/
+
+##############################################################################
+# BACKUP FILES
+##############################################################################
+# Backup files
+*.bak
+*.backup
+*.old
+*_backup
+*_old
+backup_*
+
+##############################################################################
+# DEVELOPMENT TOOLS
+##############################################################################
+# PHP_CodeSniffer
+.phpcs-cache
+
+# PHP-CS-Fixer
+.php_cs.cache
+.php-cs-fixer.cache
+
+# Psalm
+.psalm/
+psalm.xml
+
+# PHPStan
+.phpstan/
+phpstan.neon
+
+# Phan
+.phan/
+
+##############################################################################
+# API TESTING
+##############################################################################
+# Postman
+*.postman_collection.json
+*.postman_environment.json
+postman_tests/
+
+# Insomnia
+.insomnia/
+
+##############################################################################
+# CUSTOM EXCLUDES
+##############################################################################
+# Project specific temporary files
+scratch/
+playground/
+sandbox/
+
+# Development examples with real data
+examples/with_real_data/
+examples/production_test/
+
+# Local development configuration
+local_config.php
+dev_config.php
+
+# Generated API documentation
+api_documentation/generated/
+
+# Performance profiling
+profiling/
+*.prof
+xdebug.profiler_output_dir/
+
+##############################################################################
+# MISCELLANEOUS
+##############################################################################
+# Compressed files
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+
+# Image thumbnails
+*.thumb
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Dropbox
+.dropbox.attr
+
+# Local development servers
+.valet/
+
+# Laravel specific (if using Laravel components)
+storage/app/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+
+##############################################################################
+# KEEP THESE FILES (using ! to negate ignore)
+##############################################################################
+# Keep important configuration templates
+!config/database.example.php
+!config/api_credentials.example.php
+!.env.example
+
+# Keep documentation
+!README.md
+!CHANGELOG.md
+!LICENSE
+!docs/
+
+# Keep essential project files
+!composer.json
+!phpunit.xml.dist
+!.editorconfig

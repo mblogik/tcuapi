@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    TCU API Client - PHPUnit Configuration Distribution File
+    
+    This is the distribution version of PHPUnit configuration.
+    Copy to phpunit.xml and customize as needed for local development.
+    
+    @package    MBLogik\TCUAPIClient
+    @author     Ombeni Aidani <developer@mblogik.com>
+    @company    MBLogik
+    @date       2025-01-09
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="true"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true">
+
+    <!-- Test Suites -->
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- Source Code for Coverage -->
+    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true">
+        <include>
+            <directory>src</directory>
+        </include>
+        <exclude>
+            <directory>src/Database/migrations</directory>
+            <file>src/Database/MigrationRunner.php</file>
+        </exclude>
+    </source>
+
+    <!-- Coverage Reports -->
+    <coverage>
+        <report>
+            <html outputDirectory="tests/coverage/html"/>
+            <clover outputFile="tests/coverage/clover.xml"/>
+            <text outputFile="tests/coverage/coverage.txt"/>
+        </report>
+    </coverage>
+
+    <!-- Logging -->
+    <logging>
+        <junit outputFile="tests/results/junit.xml"/>
+    </logging>
+
+    <!-- Environment Variables for Testing -->
+    <php>
+        <!-- Application Environment -->
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
+        
+        <!-- Database Configuration for Tests -->
+        <env name="DB_DRIVER" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="DB_ENABLE_LOGGING" value="false"/>
+        
+        <!-- TCU API Test Configuration -->
+        <env name="TCU_API_BASE_URL" value="https://api-test.tcu.go.tz"/>
+        <env name="TCU_API_USERNAME" value="test_user"/>
+        <env name="TCU_API_SECURITY_TOKEN" value="test_token"/>
+        <env name="TCU_API_TIMEOUT" value="10"/>
+        
+        <!-- Cache Configuration for Tests -->
+        <env name="CACHE_ENABLE" value="false"/>
+        
+        <!-- Logging Configuration for Tests -->
+        <env name="LOG_LEVEL" value="debug"/>
+        <env name="LOG_ENABLE_CONSOLE" value="false"/>
+    </php>
+
+</phpunit>

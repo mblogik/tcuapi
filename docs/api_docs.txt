@@ -1,0 +1,8624 @@
+TANZANIA COMMISSION FOR UNIVERSITIES
+
+API Specification Documentation for Integrated Admission System
+(Higher Learning Institutions)
+
+May 2025
+
+Tanzania Commission for Universities
+SUMA JKT House,
+1 JKT Street, 41104 Tambukareli,
+P. O. Box 2600
+DODOMA
+Version 4.5
+
+Table of Contents
+Acronyms .................................................................................................................................................................................... ii
+1. Introduction ................................................................................................................................................................ 1
+2. System Requirements ............................................................................................................................................. 2
+3. Web Services ............................................................................................................................................................... 2
+3.1 Check Applicant Status.............................................................................................................................................. 6
+3.2 Add Applicant ............................................................................................................................................................... 9
+3.3 Submit Applicant Programme Choices ............................................................................................................. 12
+3.4 Confirm Applicant Selection ................................................................................................................................. 16
+3.5 Unconfirm Admission .............................................................................................................................................. 18
+3.6 Resubmit Applicant Details ................................................................................................................................... 20
+3.7 Populate Dashboard ................................................................................................................................................. 24
+3.8 Get Admitted Applicants ........................................................................................................................................ 26
+3.9 Get Programmes with Admitted Candidates ................................................................................................. 28
+3.10 Get applicants’ Admission Status ..................................................................................................................... 30
+3.11 Get a list of confirmed applicants..................................................................................................................... 32
+3.12 Request confirmation code................................................................................................................................. 34
+3.13 Cancel/Reject Admission..................................................................................................................................... 36
+3.14 Submit Internal Transfers .................................................................................................................................. 38
+3.15 Submit Inter-Institutional Transfers .............................................................................................................. 40
+3.16 Get applicants’ Verification Status ................................................................................................................... 42
+3.17 Submit enrolled/registered students into undergraduate programmes ........................................ 44
+3.18 Submit graduates .................................................................................................................................................... 48
+3.19 Submit Institution Staff ........................................................................................................................................ 53
+3.20 Get verification status for internally transferred students................................................................... 57
+3.21 Get verification status for inter-institutional transferred students .................................................. 59
+3.22 Restore the cancelled admission ..................................................................................................................... 61
+3.23 Submit students' dropouts ................................................................................................................................. 63
+3.24 Submit students who postponed studies ...................................................................................................... 66
+3.25 Submit admitted students into non-degree programmes ...................................................................... 70
+3.26 Get verification status for non-degree admitted students ..................................................................... 73
+3.27 Submit the applicants applied for Postgraduate programmes ............................................................ 75
+3.28 Submit admitted students into Postgraduate programmes .................................................................. 78
+3.29 Get verification status for admitted students into the Postgraduate programmes ..................... 82
+3.30 Submit transferred students from one Postgraduate programme to another .............................. 84
+3.31 Get verification status for transferred students into Postgraduate programmes....................... 87
+3.32 Submit enrolled/registered students into postgraduate programmes ........................................... 89
+3.33 Submit foreign applicants who applied for admission to bachelor's degree ................................. 94
+programmes........................................................................................................................................................................ 94
+3.34 Submit admitted foreigners into bachelor's degree programmes under Direct .................. .......97
+Entry....................................................................................................................................................................................... 97
+3.35 Submit admitted foreigners into bachelor's degree programmes under.................................... 101
+Equivalent Entry ............................................................................................................................................................ 101
+4. API Resources and Endpoints .............................................................................................................................. 106
+5. Message codes and their descriptions.............................................................................................................. 108
+6. Automated Processes .............................................................................................................................................. 109
+7. APIs and/or Processes on HEIs' Online Systems ......................................................................................... 110
+8. Contact Details ........................................................................................................................................................... 113
+i
+
+Acronyms
+API
+
+Application Programming Interfaces
+
+AVN
+
+Award Verification Number
+
+GPA
+
+Grade Points Average
+
+GUI
+
+Graphical User Interface
+
+HEIs
+
+Higher Education Institutions
+
+IAS
+
+Integrated Admission System
+
+NACTE
+
+National Accreditation Council for Technical Education
+
+NECTA
+
+National Examination Council of Tanzania
+
+NIDA
+
+National Identification Authority
+
+NIN
+
+National Identification Number
+
+SOAP
+
+Simple Object Access Protocol
+
+TCU
+
+Tanzania Commission for Universities
+
+UDDI
+
+Universal Description Discovery and Integration
+
+UIMS
+
+Universities Information Management System
+
+WSDL
+
+Web Services Description Language
+
+XML
+
+eXtensible Markup Language
+
+ii
+
+Application Programming Interface (API) Specification Documentation for
+Integrated Admission System (IAS)
+1. Introduction
+a.
+
+Purpose
+
+This document aims to specify end points implemented and thus enable admission
+stakeholders to electronically exchange information with TCU required during the
+admission process.
+Details of technical requirements in establishing the system integration are illustrated in
+this document. External stakeholders should be able to proceed with their integration
+development and later carry on the necessary testing based on this document.
+b.
+
+Scope
+
+The scope of this document is to specify and illustrate the integration requirements in terms
+of end points, data sets and connectivity requirements for technical experts. Services
+available for external stakeholders of TCU’s Integrated Admission System are as follows:
+o Check Applicant Status
+o Add Applicant of bachelor with local qualifications
+o Submit Applicant Programme Choices
+o Confirm Applicant Admission
+o Unconfirm Applicant Admission
+o Resubmit rectified applicants
+o Populate Dashboard
+o Get applicant Status
+o Get programmes with Admitted candidates
+o Get admitted/verified applicants
+o Get a list of confirmed applicants (multiple selection Only)
+o Send sms to Applicants
+o Cancel/reject admission
+o Request confirmation code
+o Internal Transfers
+o Inter-institutional transfers
+o Get applicants with multiple/single admission status
+o Submit enrolled/registered students into undergraduate programmes
+o Submit enrolled/registered students into postgraduate programmes
+o Submit Graduates
+o Submit Institution Staff
+o Get verification status for internally transferred students
+o Get verification status for inter-institutional transferred students
+o Submit students drop-outs
+o Submit students who postponed studies
+o Submit admitted students into non-degree programmes (foundation, diploma,
+certificates)
+o Get verification status for non-degree admitted students
+1
+
+o
+o
+o
+o
+o
+o
+o
+o
+
+Submit applicants applied for Postgraduate programmes
+Submit admitted students into Postgraduate programmes
+Get verification status for admitted students into Postgraduate programmes
+Submit transferred students from one Postgraduate programme to another within the
+same institution or from one institution to another
+Get verification status for transferred students into Postgraduate programmes
+Add foreigners applying for bachelor degree programmes in Tanzania
+Add foreigners admitted into bachelor degree programmes in Tanzania under Direct
+Entry
+Add foreigners admitted into bachelor degree programmes in Tanzania under
+Equivalent Entry
+c.
+
+Intended Audience
+
+This document is intended for the following audience
+o Technical Manager
+o Software Engineer / Developers
+
+2. System Requirements
+a. Development environment
+API services shall use XML, SOAP, WSDL and UDDI open standards over an Internet Protocol
+backbone. XML is used to tag the data, SOAP is used to transfer the data, WSDL is used to
+describe the services available, and UDDI is used to list what services are available. The
+environment will allow external stakeholders to obtain certified identity information
+through a programmatic interface across networks. External stakeholders can then add the
+services to a GUI (such as a web page or an executable program) to offer specific
+functionality based on agreed requirements.
+Since services are communicated using XML, the integration is not tied to any operating
+systems or programming languages. For example, external stakeholder can develop their
+application in .net, PHP, Java or Perl on Windows or UNIX operating systems.
+NOTE: Owing to the need to pass a number of parameters for each API call, the POST
+method is used for all such calls.
+b. Credential & Notification Web Service Security
+The Web service shall be secured using the username and Security Token in the header as
+per the WSS standard. This username and security token will be generated from the TCU
+Application by the system Administrator.
+
+3. Web Services
+The Following is the summary of the web service methods available for external stakeholders:
+2
+
+No
+
+Web Service Method
+
+1.
+
+Check Applicant Status
+
+2.
+
+Add Applicant with local
+(Tanzania) qualifications
+
+3
+
+Submit Applicant
+Programme Choices
+
+4
+
+Confirm Applicant
+Admission
+
+5
+
+Unconfirm Applicant
+Admission
+
+6
+7
+
+Resubmit rectified
+applicants
+Populate Dashboard
+
+Description
+Usage
+Check the applicant status in TCU
+Undergraduate
+database to determine whether the
+admission
+applicant is a prior admitted student,
+discontinued, graduated or already
+admitted applicant (subsequent rounds
+after first round)
+** exclude current year form six and
+diploma graduates for first round of
+application. However, subsequent
+rounds should use the end point to
+exclude applicants already admitted.
+Add a new applicant by inserting
+Undergraduate
+institution id, gender, form 4 index
+admission
+number, form 6 index number (or AVN
+for diploma holders) and category, other
+form four index number(s) and other
+form six index number(s). This endpoint
+is for applicants applying for bachelor
+degree programmes
+After selection for admission has been
+Undergraduate
+done, submit the list of applicants with admission
+their choices and other contact details to
+TCU (TCU’s template)
+Institution Code, gender, form four index
+number, form six index number,
+programme choices, mobile number,
+email, admission status, programme of
+admission, reason, applicant category,
+other form four index number(s) and
+other form six index number(s).
+Each applicant with multiple selections Undergraduate
+shall use a TCU provided token/code to admission
+confirm selection to ONLY one HLI, and
+the same shall be confirmed with TCU.
+An applicant that had confirmed can
+Undergraduate
+reject the admission via the respective
+admission
+HLI online system, and the same shall be
+passed on to TCU.
+Update TCU on applicant details that
+Undergraduate
+might be different from the initial
+admission
+submission.
+Update latest application statistics to the Undergraduate
+TCU dashboard (update once a day) i.e. admission
+3
+
+No
+
+Web Service Method
+
+8
+
+Get applicant status
+
+9
+
+Get admitted applicants
+
+10
+
+Get programmes with
+Admitted candidates
+
+11
+
+Get a list of confirmed
+applicants
+
+12
+
+Request a confirmation
+code
+
+13
+
+Cancel/ Reject Admission
+
+14
+
+Submit internal transfers
+
+15
+
+Get Applicant’s
+Verification Status
+
+16
+
+17
+
+Submit inter institutional
+transfers
+Submit
+enrolled/registered
+students into
+undergraduate
+programmes
+
+18
+
+Submit Graduates
+
+19
+
+Submit Institution Staff
+
+20
+
+Get verification status for
+internally transferred
+students
+
+21
+
+Get verification status for
+inter-institutional
+transferred students
+
+Description
+Usage
+programme code, number of males and
+number of females.
+Download a list of applicants with their Undergraduate
+admission status.
+admission
+Download a list of selected and
+Undergraduate
+confirmed applicants (per institution,
+admission
+per course).
+Download a list of programme codes for Undergraduate
+admission
+programmes with selected applicants.
+Get a list of confirmed applicants who
+Undergraduate
+had multiple admissions and their
+admission
+confirmation status per programme.
+An applicant that had multiple
+Undergraduate
+admission can request confirmation
+admission
+code via the respective HLI online
+system, and the same shall be passed on
+to TCU.
+An applicant that had been admitted can Undergraduate
+cancel his admission via the respective admission
+HLI online system, and the same shall be
+passed on to TCU.
+An applicant who has been admitted but Undergraduate
+wishes to transfer to another
+admission
+programme within the same institution.
+Get the applicants’ Verification Status
+Undergraduate
+Download a list of applicants with their admission
+verification status
+An applicant who has been admitted and Undergraduate
+wishes to transfer to another institution. admission
+A student registered/enrolled into an
+undergraduate programme in an
+academic year
+
+Undergraduate
+
+All who have graduated from a
+particular institution
+
+Both Undergraduate
+and Postgraduate
+
+Institution staff i.e. both academic and
+administrative staff
+Download applicants who have
+requested internal transfers and their
+TCU verification status
+Download applicants who have
+requested for inter-institutional
+transfers and their TCU verification
+status
+
+Used to submit the list
+of all employees
+
+4
+
+Undergraduate
+transfers
+Undergraduate
+transfers
+
+No
+
+Web Service Method
+
+Description
+
+22
+
+Restore cancelled
+admission
+
+Restore admission for applicants who
+previously cancelled their admissions
+
+23
+
+Submit students drop-outs
+
+24
+
+Submit students who
+postponed studies
+
+25
+
+Submit admitted students
+into non-degree
+programmes (foundation,
+diploma, certificates)
+
+26
+
+Get verification status for
+non-degree admitted
+students
+
+27
+
+Submit applicants applied
+for Postgraduate
+programmes
+
+28
+
+Submit admitted students
+into Postgraduate
+programmes
+
+29
+
+Get verification status for
+admitted students into
+Postgraduate programmes
+
+30
+
+31
+
+32
+
+33
+
+Submit transferred
+students from one
+Postgraduate programme
+to another within the same
+institution or from one
+institution to another
+Get verification status for
+transferred students into
+Postgraduate programmes
+Submit
+enrolled/registered
+students into postgraduate
+programmes
+Add foreigners applied for
+admission into bachelor
+programmes in Tanzania
+
+Usage
+Undergraduate
+admission
+
+Both Undergraduate
+Add students who dropped their studies and Postgraduate
+dropouts
+Both Undergraduate
+Submit students who postponed studies
+and Postgraduate
+in the current academic year
+postponements
+Used to submit to TCU
+the list of admitted
+Add students admitted into non-degree
+students into nonprogrammes (Certificates, Diplomas or
+degree programmes
+Foundation Programme)
+by University
+institutions
+Check verification
+status of admitted
+Download admitted students into nonstudents into nondegree programmes and their
+degree programmes
+verification status
+by University
+institutions
+Postgraduate
+Submit to TCU the list of applicants
+admission
+applied for Postgraduate degree
+programmes in University Institutions
+Submit to TCU the list of admitted
+students into Postgraduate degree
+programmes in University Institutions
+Download admitted students into
+Postgraduate programmes and their
+verification statuses
+
+Postgraduate
+admission
+Postgraduate
+admission
+
+Postgraduate
+Submit to TCU the list of admitted
+admission
+students into Postgraduate programmes
+in University institutions
+Download transferred students into
+Postgraduate programmes and their
+verification status
+A student registered/enrolled into a
+postgraduate programme in an
+academic year
+
+Postgraduate
+admission
+Postgraduate
+
+Add a new applicant by inserting
+Undergraduate
+institution id, gender, first name, second admission
+name, surname, nationality, year of birth
+and applicant category. This endpoint is
+for foreigners applying for bachelor
+5
+
+No
+
+Web Service Method
+
+34
+
+Add foreigners with Direct
+Qualifications admitted
+into bachelor programmes
+in Tanzania
+
+35
+
+Add foreigners with
+Equivalent Qualifications
+admitted into bachelor
+programmes in Tanzania
+
+Description
+degree programmes in Tanzania
+After selection for admission has been
+done and approved by relevant organs,
+submit the list of admitted foreigners
+with Direct Qualifications.
+After selection for admission has been
+done and approved by relevant organs,
+submit the list of admitted foreigners
+with Equivalent Qualifications to the
+Commission.
+
+Usage
+Undergraduate
+admission
+
+Undergraduate
+admission
+
+3.1 Check Applicant Status
+Web Service Method
+
+Description
+
+Check status
+
+Check the applicant status in TCU database to determine whether the
+applicant is a prior admitted student, discontinued, graduated or holder of
+current admission (during subsequent rounds).
+
+Url: https://api.tcu.go.tz/applicants/checkStatus
+Call method: POST
+Note:
+- Exclude current year form six and diploma graduates for the first round of
+application. In subsequent rounds, check everybody.
+- For applicants with multiple O-level sittings, check all index numbers
+- Can be used for an individual or a batch of applicants
+(a) Request Parameters
+Name
+Direction
+Type
+
+Form Four Index number
+Input
+checkStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU.
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generated by TCU
+system.
+Body
+String
+Form Four Index Number in given format.
+6
+
+For applicants with NECTA certificate the format for Form
+Four Index Number is “S1001/0012/2014”
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+
+Field
+Format
+Varchar, 15
+
+Usage
+
+Description
+
+Mandatory
+
+Form Four Index Number in specific format
+Form Four Index Number format
+“S1001/0012/2014”
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding applicant’s
+admission status i.e. status code and status description.
+
+(d) Response Payload
+Attribute, Type & Length
+f4inde
+xno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+
+Description
+Form Four Index Number
+
+Varchar, 50
+Varchar, 128
+
+Service Response Code
+Description of Service Response
+
+Example request
+For single index number
+<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+< SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+</RequestParameters>
+</Request>
+
+7
+
+For Multiple index numbers
+<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<f4indexno> S1001/0015/2016</f4indexno>
+</RequestParameters>
+</Request>
+Example response
+For single index number
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>202</StatusCode>
+<StatusDescription> Applicant has no prior admission</StatusDescription>
+</ResponseParameters>
+</Response>
+For Multiple index numbers
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>No Prior Admission</StatusDescription>
+</ResponseParameters>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>202</StatusCode>
+<StatusDescription>Applicant has no prior admission</StatusDescription>
+</ResponseParameters>
+</Response>
+Example Curl call:
+curl -i -X POST \
+-H "Content-Type:application/xml" \
+-d \
+'<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+8
+
+<UsernameToken>
+<Username>DM</Username >
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken >
+<RequestParameters >
+<f4indexno> S1001/0012/2018</f4indexno>
+</RequestParameters>
+</Request>' \
+'https://api.tcu.go.tz/applicants/checkStatus'
+
+3.2 Add Applicant
+Web Service Method
+Add Applicant
+
+Description
+Add a new applicant by inserting the institution code, gender, form four
+index number, form six index number (or AVN for diploma holders),
+applicant category, other form four index number(s) and other form six
+index number(s).
+
+Url: https://api.tcu.go.tz/applicants/add
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. Institution Code
+ii. Gender
+iii. Form Four Index number
+iv. Form Six Index Number (or AVN for diploma holders)
+v. Applicant Category (Diploma or Form 6)
+vi. Other f4 index numbers (separated by comma)
+vii. Other f6 index numbers (separated by comma)
+Input
+Add
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU application with Session token
+SessionToken String System generated Token used to authenticate request before
+processing generate by TCU System.
+Body
+
+Request Body Section
+Contains Elements
+Body contains the form 4 and form 6 Index numbers as well as applicant
+category.
+i.
+
+String
+9
+
+Form Four Index Number in given format.
+For applicants with NECTA certificate the Format for Form Four
+Index Number is “S1001/0012/2014”
+ii. String
+Form Six Index Number in given format.
+For applicants with NECTA certificate the Format for Form Four
+Index Number is “S1001/0512/2018”
+iii. Character
+Applicant Category.
+‘A’ for A-level, ‘D’ for Diploma holders, 'F' for Foundation holders
+and 'B' for bachelor degree holders
+iv. String
+Other form four index number(s)
+v. String
+Other form six index number(s)
+vi. String
+Gender
+(b) Request Payload
+Attribute, Type &
+Length
+
+Field Format
+
+Usage
+
+Description
+
+f4indexno
+
+Varchar, 15
+
+Mandatory
+
+f6indexno
+
+Varchar, 15
+
+Mandatory
+
+Category
+
+Character,1
+
+Mandatory
+
+Gender
+Otherf4indexno
+
+Character,1
+Varchar, 100
+
+Mandatory
+Optional
+
+Otherf6indexno
+
+Varchar, 100
+
+Optional
+
+Form Four Index Number in
+specific format.
+For applicants with NECTA
+certificate the format for Form
+Four Index Number is
+“S1001/0512/2018”
+Form Six Index Number in
+specific format.
+For applicants with NECTA
+certificate the format for Form
+Four Index Number is
+“S1001/0512/2018”
+‘A’ for A-level, ‘D’ for Diploma
+holders, 'F' for Foundation
+holders and 'B' for bachelor
+degree holders
+Applicant sex, i.e. “M” or “F”
+Separated by comma other form
+four index numbers.
+Separated by comma other form
+six index numbers.
+
+10
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding applicant’s insert
+status i.e. status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 20
+Varchar, 128
+
+Description
+Form Four Index Number
+Insertion status code
+Status Description of Service Response
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken >
+<RequestParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<f6indexno> S1001/0562/2018 </f6indexno>
+<Gender>M</ Gender >
+<Category>A</Category>
+<Otherf4indexno> P1001/0012/2016, P1020/0289/2015</Otherf4indexno>
+<Otherf6indexno> P1001/0562/2016, P0234/0002/2014 </Otherf6indexno>
+</RequestParameters>
+<RequestParameters>
+<f4indexno> S1001/0013/2018</f4indexno>
+<f6indexno>S1001/0563/2018 </f6indexno>
+<Gender>F</ Gender >
+<Category>A</Category>
+<Otherf4indexno> P1001/0012/2016, P1020/0289/2015</Otherf4indexno>
+<Otherf6indexno> P1001/0562/2016, P0234/0002/2014 </Otherf6indexno>
+</RequestParameters>
+</Request>
+
+11
+
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<f4indexno>S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>Data successfully inserted</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.3 Submit Applicant Programme Choices
+Web Service
+Method
+Submit
+Programme
+
+Description
+Submit Applicant Programme Choices After selection for admission has been done,
+submit the list of applicants with their choices and other contact details to TCU
+(TCU’s template).
+Form four index number, form six index number, programme choices, mobile
+number, email, admission status, programme of admission, reason, nationality,
+impairment, gender, date of birth, other form four index number, National
+Identification Number (NIN) and other form six index number.
+
+Url: https://api.tcu.go.tz/applicants/submitProgramme
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i.
+ii.
+iii.
+iv.
+v.
+vi.
+vii.
+viii.
+ix.
+x.
+xi.
+xii.
+xiii.
+xiv.
+xv.
+xvi.
+xvii.
+
+Form Four Index number
+Form Six Index number
+Gender
+Selected programmes (separated by comma)
+Mobile number
+Other Mobile number
+Email address
+Applicant category
+Admission status
+Programme admitted
+Reason
+Nationality
+Impairment
+Date of birth
+Other form four index number
+Other form six index number
+National Identification Number
+
+Input
+submitProgramme
+12
+
+Content type
+Component
+Header
+Component
+Username
+SessionToken
+Body
+
+Type
+Request header section
+Contains elements as define in the following table
+Type
+Description
+String
+Username provided by TCU
+String
+System generated Token used to authenticate request
+before processing generate by TCU System.
+Request Body Section
+Contains Elements
+Body contains the Form four and form six index numbers or AVN
+number, gender, applicant’s selected programmes , National
+Identification Number, nationality, impairment (disability) as
+well as date of birth
+i.
+
+String
+Form Four Index Number in given format.
+For applicants with NECTA certificate the
+Format for Form Four Index Number is
+“S1001/0012/2014”
+
+ii. String
+Form Six Index Number in given format.
+For applicants with NECTA certificate the
+Format for Form Four Index Number is
+“S1001/0512/2018”
+iii. String
+Selected programmes (separated by comma)
+iv. Character
+Applicant Category.
+‘A’ for A-level, ‘D’ for Diploma holders, 'F' for
+Foundation holders and 'B' for bachelor degree
+holders
+v. String
+Mobile number
+vi. Character
+Gender.
+vii. String
+Other Mobile number
+viii. String
+Email address
+13
+
+ix. String
+Admission Status
+x. String
+Programme admitted
+xi. String
+Reason
+xii. String
+Nationality
+xiii. String
+Impairment
+xiv. String
+Date of birth.
+Date format YYYY-MM-DD
+xv. String
+Other form four index number
+xvi. String
+Other form six index number
+xvii.
+
+String
+National Identification Number
+
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 15
+
+Mandatory
+
+f6indexno
+SelectedProgrammes
+
+Varchar, 15
+Varchar, 100
+
+Mandatory
+Mandatory
+
+Gender
+MobileNumber
+OtherMobileNumber
+EmailAddress
+Category
+AdmissionStatus
+ProgrammeAdmitted
+Reason
+Nationality
+Impairment
+
+Character,1
+Varchar,15
+Varchar,15
+Varchar,30
+Character,1
+Varchar,10
+Varchar,10
+Varchar, 100
+Varchar, 50
+Varchar, 20
+
+Mandatory
+Mandatory
+Optional
+Mandatory
+Mandatory
+Mandatory
+Optionals
+Mandatory
+Mandatory
+Mandatory
+
+Form Four Index Number in specific format
+Form Four Index Number format
+“S1001/0012/2018”
+Form Six Index number
+List of selected programmes separated by
+comma.
+Applicant’s sex (M or F)
+Applicant’s mobile number
+Other Applicant’s mobile number (Next of kin)
+Applicant’s email address
+Applicant Category
+Admission status
+Programme the applicant is admitted to
+Reason for not being admitted
+Applicant’s nationality
+Applicant’s disability
+
+14
+
+Attribute, Type &
+Length
+DateOfBirth
+Otherf4indexno
+Otherf6indexno
+NationalIdNumber
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 12
+Varchar , 100
+Varchar, 100
+Varchar, 50
+
+Mandatory
+Optional
+Optional
+Optional
+
+Applicant’s date of birth
+Additional A-level sittings
+Additional O-level sittings
+National Identification Number
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant Status,
+status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 50
+Varchar, 128
+
+Description
+Form Four Index Number
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>UDSM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno> S1001/0012/2018</f4indexno >
+<f6indexno> S1001/0562/2018 </f6indexno>
+<Gender> M </ Gender >
+<SelectedProgrammes>UD023, UD038, UD022</SelectedProgrammes>
+<MobileNumber> 0766345678</MobileNumber>
+<OtherMobileNumber> 0766345678</OtherMobileNumber>
+<EmailAddress> steve2014@hotmail.com </EmailAddress>
+<Category>A</Category>
+<AdmissionStatus>provisional admission </AdmissionStatus>
+<ProgrammeAdmitted>UD038</ProgrammeAdmitted>
+<Reason>eligible</Reason>
+<Nationality >Tanzanian</Nationality>
+15
+
+<Impairment>None</Impairment>
+<DateOfBirth>1980-12-09</DateOfBirth>
+<NationalIdNumber>19620228-00001-00001-19</NationalIdNumber>
+<Otherf4indexno>S0001/0001/2009, S0001/0001/2010</Otherf4indexno>
+<Otherf6indexno> S0001/0501/2009, S0001/0501/2010</Otherf6indexno>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was performed successfully</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.4 Confirm Applicant Selection
+Web Service Method
+Applicant
+Confirmation
+
+Description
+Confirm Applicant Selection
+Each applicant with multiple selections shall use a TCU-provided token/code
+to confirm selection to ONLY one HLI, and the same shall be confirmed with
+TCU.
+
+Url: https://api.tcu.go.tz/admission/confirm
+Call method: POST
+(a) Request Parameters
+Name
+i. Form Four Index number
+ii. Confirmation code
+Direction Input
+Type
+confirm
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken String System generated Token used to authenticate request before
+processing generate by TCU system.
+Body
+
+I.
+
+String
+Form Four Index Number in given format.
+Form Four Index Number format “S1001/0012/2018”
+
+II.
+
+String
+Confirmation Code
+16
+
+(b) Request Payload
+Attribute, Type
+& Length
+f4indexno
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 15
+
+Mandatory
+
+ConfirmationCode
+
+Varchar, 12
+
+Mandatory
+
+Form Four Index Number in specific format
+Form Four Index Number format
+“S1001/0012/2018”
+A confirmation code
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding applicant
+status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service response status code
+Description of service response status code
+
+N.B. HEIs should ONLY consider the applicant as confirmed If and only if the appropriate
+confirmation status from TCU is received. If not another HLI could claim the confirmation should
+the applicant decide to change his/her mind and confirm elsewhere.
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<ConfirmationCode>A5267Y</ConfirmationCode>
+</RequestParameters>
+</Request>
+
+17
+
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.5 Unconfirm Admission
+Web Service Method
+
+Description
+Unconfirm Admission
+An applicant who has confirmed can unconfirm the admission via the
+respective HLI online system, and the same will be passed on to TCU.
+
+Unconfirm Admission
+
+Url: https://api.tcu.go.tz/admission/unconfirm
+Call method: POST
+(a) Request Parameters
+i.
+ii.
+
+Name
+Direction
+Type
+
+Input
+unconfirm
+Content type
+Component
+Header
+Component
+Username
+SessionToken
+Body
+
+Form four index number
+Confirmation code
+
+Type
+Request header section
+Contains elements as define in the following table
+Type
+Description
+String
+Username provided by TCU
+String
+System generated Token used to authenticate request
+before processing generate by TCU system.
+i.
+
+String
+Form Four Index Number in given format.
+Form Four Index Number format “S1001/0012/2018”
+
+ii.
+
+String
+Confirmation Code
+
+18
+
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+
+Field
+Format
+Varchar, 15
+
+Usage
+
+Description
+
+Mandatory
+
+ConfirmationCode
+
+Varchar , 12
+
+Mandatory
+
+Form Four Index Number in specific format
+Form Four Index Number format
+“S1001/0012/2018”
+“REJECT” to imply a previously confirmed admission
+is now being released
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Applicant Status and error code objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service response status code
+Description of service response status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>UDSM</Username>
+< SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters >
+<f4indexno> S1001/0012/2018</f4indexno>
+<ConfirmationCode>36R96P</ConfirmationCode>
+</RequestParameters>
+</Request>
+
+19
+
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.6 Resubmit Applicant Details
+Web Service Method
+
+Description
+
+Resubmit Programme
+
+Resubmit rectified applicants:
+Update TCU on applicant details that might be different from the initial
+submission=> form four index number, form six index number, gender,
+programme choices, mobile number, other mobile number, email, admission
+status, programme of admission, reason, applicant category, other form four
+index number(s), other form six index number(s), nationality, impairment, date
+of birth
+
+Url: https://api.tcu.go.tz/applicants/resubmit
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i.
+ii.
+iii.
+iv.
+v.
+vi.
+vii.
+viii.
+ix.
+x.
+xi.
+xi.
+xii.
+xiii.
+xiv.
+xii.
+
+Form four index number
+Form six index number
+Gender
+Programme choices
+Mobile number
+Other mobile number
+Email address
+Admission status
+Programme admitted
+Reason
+Applicant category
+Other form four index number(s)
+Other form six index number(s)
+Nationality
+Impairment
+Date of birth
+
+Input
+resubmit
+20
+
+Content type
+Component
+Header
+Component
+Username
+SessionToken
+Body
+
+Type
+Request header section
+Contains elements as define in the following table
+Type
+Description
+String
+Username provided by TCU
+String
+System generated Token used to authenticate request before
+processing generate by TCU system.
+i.
+
+String
+Form Four Index Number in given format.
+For applicants with NECTA certificate the format for Form
+Four Index Number is “S1001/0012/2014”
+
+ii. String
+Form Six Index Number in given format. For applicants with
+NECTA certificate the format for Form Six Index Number is
+“S1001/0012/2014”
+iii. String
+Programme choices
+iv. Character
+Gender
+v. String
+Mobile number
+vi. String
+Other Mobile number
+vii. String
+Email
+viii. String
+Admission status
+ix. String
+Programme admitted
+x. String
+Reason
+xi. Character
+Applicant category
+xii. String
+
+21
+
+Other form four index number(s)
+xiii. String
+Other form six index number(s)
+xiv. String
+Nationality
+xv. String
+Date of birth
+xvi. String
+Impairment
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 15
+
+Mandatory
+
+f6indexno
+
+Varchar, 15
+
+Mandatory
+
+SelectedProgrammes
+MobileNumber
+OtherMobileNumber
+EmailAddress
+AdmissionStatus
+ProgrammeAdmitted
+Reason
+Category
+
+Varchar, 100
+Varchar,15
+Varchar,15
+Varchar,30
+Varchar,10
+Varchar,10
+Varchar, 100
+char, 1
+
+Mandatory
+Mandatory
+Optional
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+Gender
+Otherf4indexno
+Otherf6indexno
+Nationality
+Impairment
+Date of Birth
+
+character, 1
+Varchar, 100
+Varchar, 100
+Varchar, 50
+Varchar, 20
+Varchar, 12
+
+Mandatory
+Optional
+Optional
+Mandatory
+Mandatory
+Mandatory
+
+Form Four Index Number in given format.
+For applicants with NECTA certificate the format
+for Form Four Index Number is
+“S1001/0012/2014”
+Form Six Index Number in given format.
+For applicants with NECTA certificate the format
+for Form Six Index Number is S1001/0012/2014”
+Comma separated List of selected programmes
+Applicant’s mobile number
+Other Applicant’s mobile number
+Applicant’s email address
+Admission status
+Programme the applicant is admitted to
+Reason for not being admitted
+Applicant category ‘A’ for Form Six and ‘D’ for
+Diploma holders
+Applicant’s sex (M or F)
+Comma separated other form four index numbers
+Comma separated other form six index numbers
+Applicant’s nationality
+Applicant’s disability
+Applicant’s date of birth
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+22
+
+Content type
+Component
+Body
+
+Type
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Applicant Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 50
+Varchar, 128
+
+Description
+Form Four Index Number
+Response status code
+Description of status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken >
+<RequestParameters>
+<f4indexno> S1001/0012/2018</f4indexno >
+<f6indexno> S1001/0562/2018 </f6indexno>
+<Gender> M </ Gender >
+<SelectedProgrammes>UD023, UD038, UD022</SelectedProgrammes>
+<MobileNumber> 0766345678</MobileNumber>
+<OtherMobileNumber>0766345679<OtherMobileNumber>
+<EmailAddress>steve2014@hotmail.com </EmailAddress>
+<AdmissionStatus>Provisional admission </AdmissionStatus>
+<ProgrammeAdmitted>UD038</ProgrammeAdmitted>
+<Category>eligible</Category>
+<Reason>eligible</Reason>
+<Nationality >Tanzanian</Nationality>
+<Impairment>None</Impairment>
+<DateOfBirth>1980-12-09</DateOfBirth>
+<Otherf4indexno> P1001/0012/2016, P1020/0289/2015</Otherf4indexno>
+<Otherf6indexno> P1001/0562/2016,P0234/0002/2014 </Otherf6indexno>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+23
+
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was performed successfully</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.7 Populate Dashboard
+Web Service Method
+
+Description
+
+Populate Dashboard
+
+Populate Dashboard
+Update the latest application statistics to the TCU dashboard (update once a
+day) => programme code, number of males and number of females
+
+Url: https://api.tcu.go.tz/dashboard/populate
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. Programme Code
+ii. Males
+iii. Females
+Input
+populate
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate request
+before processing generate by TCU system.
+Body
+
+i.
+
+String
+Programme Code
+
+ii. Integer
+Males: Number of male applicants
+iii. Integer
+Females: Number of female applicants
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 5
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+24
+
+Attribute, Type &
+Length
+Males
+Females
+
+Field Format
+
+Usage
+
+Description
+
+integer, 4
+integer, 4
+
+Mandatory
+Mandatory
+
+Number of male applicants
+Number of female applicants
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding applicant status,
+status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 50
+Varchar, 128
+
+Description
+Form Four Index Number
+Service response status code
+Description of service response status description
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>DM038</ProgrammeCode>
+<Males>45</Males>
+<Females>60</Females>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<ProgrammeCode> DM038</ProgrammeCode>
+<StatusCode>200</StatusCode>
+25
+
+<StatusDescription>The operation was performed
+successfully</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.8 Get Admitted Applicants
+Web Service Method
+
+Description
+Get admitted applicants:
+Download a list of admitted and confirmed applicants (per institution, per
+course)
+
+Get Admitted
+
+Url: https://api.tcu.go.tz/admission/getAdmitted
+Call method: POST
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme Code
+Input
+getAdmitted
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken String
+System generated Token used to authenticate request before
+processing generate by TCU system.
+Body
+
+i.
+
+Varchar : Programme Code
+
+(b) Request Payload
+Attribute, Type
+& Length
+ProgrammeCode
+
+Field
+Format
+Varchar, 5
+
+Usage
+
+Description
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+(c) Response Parameters
+Name
+
+Direction
+Type
+
+i. Programme Code
+ii. Status Code
+iii. Status Description
+iv. Applicant’s details
+Output
+TCUInformationResponse
+Content type
+26
+
+Component
+Body
+
+Type
+Response Body Section
+Contains elements
+Body of the response contains the InstitutionCode, programme and array of
+Form Four Index Numbers
+i.
+
+String
+Programme Code
+
+ii. Integer
+Status Code
+iii. String
+Status Description
+iv. String
+Containing list of form four index numbers
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+ProgrammeCode
+f4indexno
+f6indexno
+MobileNumber
+EmailAddress
+AdmissionStatus
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar, 5
+Varchar, 15
+Varchar, 15
+Varchar, 15
+Varchar, 70
+Varchar, 128
+
+Description
+Service response status code
+Description of service response status code
+Programme code
+Form four index number
+Form six index number
+Applicant’s mobile number
+Applicant’s email address
+Applicant’s admission status
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>DM023</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters >
+<ProgrammeCode>DM023</ProgrammeCode>
+<StatusCode>200</StatusCode>
+27
+
+<StatusDescription>Operation was successful</StatusDescription>
+<Applicant>
+<f4indexno> S1001/0012/2016</f4indexno >
+<f6indexno> S1001/0562/2018 </f6indexno>
+<MobileNumber> 0766345678</MobileNumber>
+<EmailAddress>steve2014@hotmail.com</EmailAddress>
+<AdmissionStatus>Provisional admission</AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0013/2016</f4indexno >
+<f6indexno> S1001/0565/2018 </f6indexno>
+<MobileNumber> 0766345678</MobileNumber>
+<EmailAddress> applicant@hotmail.com </EmailAddress>
+<AdmissionStatus>Provisional admission </AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0042/2016</f4indexno >
+<f6indexno> S1001/0572/2018 </f6indexno>
+<MobileNumber> 0766345678</MobileNumber>
+<EmailAddress> steve2014@hotmail.com </EmailAddress>
+<AdmissionStatus>provisional admission </AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0016/2016</f4indexno >
+<f6indexno> S1001/0662/2018 </f6indexno>
+<MobileNumber> 0766345678</ MobileNumber>
+<EmailAddress> steve2014@hotmail.com </ EmailAddress>
+<AdmissionStatus>provisional admission </AdmissionStatus>
+</Applicant>
+</ResponseParameters>
+</Response>
+
+3.9 Get Programmes with Admitted Candidates
+Web Service Method
+
+Description
+
+Get Programmes with
+Admitted applicants
+
+Get programmes with admitted candidates
+Download a list of institutions with all programmes with admitted
+applicants
+
+Url: https://api.tcu.go.tz/admission/getProgrammes
+Call method: POST
+(a) Request Parameters
+Direction
+Type
+
+Input
+getProgrammes
+28
+
+Content type
+Component
+Header
+Component
+Username
+SessionToken
+
+Type
+Request header section
+Contains elements as define in the following table
+Type
+Description
+String
+Username provided by TCU
+String
+System generated Token used to
+authenticate request before processing
+generate by TCU system.
+
+(b) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information: list of programmes that has
+at least one selected applicant
+
+(c) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+ProgrammeCode
+NumberOfApplicant
+
+Field Format
+Varchar, 20
+Varchar, 128
+Varchar, 5
+Integer
+
+Description
+Service response status code
+Description of service response status code
+Programme code
+Number of applicants
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<StatusDescription>Data successfully retrieved</StatusDescription>
+29
+
+<Programme>
+<ProgrammeCode>DM001 </ProgrammeCode>
+<NumberOfApplicant>90 </NumberOfApplicant>
+</Programme>
+<Programme>
+<ProgrammeCode>DM002 </ProgrammeCode>
+<NumberOfApplicant>120 </NumberOfApplicant>
+</Programme>
+<Programme>
+<ProgrammeCode>DM003 </ProgrammeCode>
+<NumberOfApplicant>140 </NumberOfApplicant>
+</Programme>
+</ResponseParameters>
+</Response>
+
+3.10 Get applicants’ Admission Status
+Web Service Method
+
+Description
+
+Get Applicant’s Admission
+Status
+
+Get applicants’ Admission Status
+Download a list of applicants with their admission status i.e whether they
+have single or multiple admissions
+
+Url: https://api.tcu.go.tz/applicants/getStatus
+Call method: POST
+Note: This is an alternative to broadcasting multiple/single admission status (PUSH from TCU’s
+Side). Now HEIs can PULL the admission status
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+system.
+Body
+i. String
+Programme code
+
+30
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 5
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+AdmissionStatus
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 100
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s admission status
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>DM023</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<StatusDescription>The operation was performed
+successfully</StatusDescription>
+31
+
+<ProgrammeCode> DM023</ProgrammeCode>
+<Applicant>
+<f4indexno> S1001/0012/2016</f4indexno>
+<AdmissionStatusCode>225</AdmissionStatusCode>
+<AdmissionStatusDescription>The applicant has multiple
+admission</AdmissionStatusDescription>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0013/2016</f4indexno>
+<AdmissionStatusCode>225</AdmissionStatusCode>
+<AdmissionStatusDescription>The applicant has multiple
+admissions</AdmissionStatusDescription>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0042/2016</f4indexno>
+<AdmissionStatusCode>226</AdmissionStatusCode>
+<AdmissionStatusDescription>The applicant has single
+admission</AdmissionStatusDescription>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0016/2016</f4indexno>
+<AdmissionStatusCode>226</AdmissionStatusCode>
+<AdmissionStatusDescription>The applicant has single
+admission</AdmissionStatusDescription>
+</Applicant>
+</ResponseParameters>
+</Response>
+
+3.11 Get a list of confirmed applicants
+Web Service Method
+Get list of confirmed
+applicants
+
+Description
+•
+
+Get a list of confirmed applicants
+
+•
+
+Get a list of applicants with multiple admissions but who
+confirmed elsewhere
+
+Url: https://api.tcu.go.tz/applicants/getConfirmed
+Call method: POST
+Note: This is similar to 3.11 only that it narrows down to applicants with multiple admissions only.
+This is useful for feedback after some students have confirmed their admission to some HEIs
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme Code
+Input
+getConfirmed
+32
+
+Content type
+Component
+Header
+Component
+Username
+SessionToken
+Body
+
+Type
+Request header section
+Contains elements as define in the following table
+Type
+Description
+String
+Username provided by TCU
+String
+System generated Token used to authenticate request before
+processing generate by TCU system.
+i. String
+Programme Code
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+String,5
+
+Mandatory
+
+Programme code
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information:
+programme code, list of confirmed applicants
+
+(d) Response Payload
+Attribute, Type & Length
+ProgrammeCode
+f4indexno
+StatusCode
+StatusDescription
+ConfirmationStatusCode
+
+Field Format
+Varchar, 5
+Varchar, 15
+Varchar, 20
+Varchar, 128
+Varchar, 5
+
+Description
+Programme code
+List of index numbers
+Service response status code
+Description of service response status code
+Confirmation status Code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+33
+
+<RequestParameters>
+<ProgrammeCode> DM023</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<ProgrammeCode> DM023</ProgrammeCode>
+<StatusCode>200</StatusCode>
+<StatusDescription>Data successfully retrieved</StatusDescription>
+<Applicant>
+<f4indexno> S1001/0013/2016</f4indexno>
+<f6indexno> S1001/0590/2018</f6indexno>
+<DiplomaRegNo>AVN2018927682</DiplomaRegNo>
+<ProgrammeCode> UD034</ProgrammeCode>
+<ConfirmationStatusCode>234</ConfirmationStatusCode>
+<AdmissionStatus> confirmed to other HLI </AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0042/2016</f4indexno>
+<f6indexno> S1001/0545/2018</f6indexno>
+<DiplomaRegNo>AVN20180982FE</DiplomaRegNo>
+<ProgrammeCode> DD034</ProgrammeCode>
+<ConfirmationStatusCode>233</ConfirmationStatusCode>
+<AdmissionStatus>Confirmed </AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0016/2016</f4indexno>
+<f6indexno> S1001/0516/2018</f6indexno>
+<DiplomaRegNo>AVN20189282ME</DiplomaRegNo>
+<ProgrammeCode> UD034</ProgrammeCode>
+<ConfirmationStatusCode>234</ConfirmationStatusCode>
+<AdmissionStatus>confirmed to other HLI</AdmissionStatus>
+</Applicant>
+</ResponseParameters>
+</Response>
+
+3.12 Request confirmation code
+Web Service Method
+
+Description
+
+Request a confirmation
+code
+
+Request a confirmation code
+An applicant who had multiple admissions can request a confirmation code
+via the respective HLI online system, and the same shall be passed on to TCU.
+
+Url: https://api.tcu.go.tz/admission/requestConfirmationCode
+Call method: POST
+34
+
+(a) Request Parameters
+Name
+Direction
+Type
+
+i.
+Form four index number
+ii.
+Mobile Number
+iii.
+Email Address
+Input
+requestConfirmationCode
+Content type
+Component Type
+Header
+Request header section
+Contains elements as define in the following table
+Component Type
+Description
+Username
+String Username provided by TCU
+SessionTok String System generated Token used to authenticate request before
+en
+processing generate by TCU system.
+Body
+i.
+String
+Form four index number
+ii.
+String
+Mobile number
+iii.
+String
+Email address
+
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+MobileNumber
+EmailAddress
+
+Field Format
+
+Usage
+
+Description
+
+String,5
+String,12
+String, 50
+
+Mandatory
+Mandatory
+Mandatory
+
+Form four index number
+Mobile number
+Email address
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information :
+form four index number, status code and status description
+
+(c) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 20
+Varchar, 128
+
+Description
+List of index numbers
+Service response status code
+Description of service response status code
+
+35
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno>S0001/0118/2019</f4indexno>
+<MobileNumber>06XXXXXXXX</MobileNumber>
+<EmailAddress>xyz@yahoo.com</ EmailAddress >
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<f4indexno>S0001/0118/2019</f4indexno>
+<StatusCode>223</StatusCode>
+<StatusDescription>Confirmation code has been sent to your email address and
+mobile number</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.13 Cancel/Reject Admission
+Web Service Method
+
+Description
+
+Cancel/Reject Admission
+
+Cancel/ Reject Admission
+An applicant who had prior admission can cancel his admission via the
+respective HLI online system, and the same shall be passed on to TCU.
+
+Url: https://api.tcu.go.tz/admission/reject
+Call method: POST
+(a) Request Parameters
+Name
+Directio
+n
+Type
+
+i.
+
+Form four index number
+
+Input
+requestConfirmationCode
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+36
+
+Component
+Username
+SessionToken
+Body
+
+Type
+String
+String
+i.
+
+Description
+Username provided by TCU
+System generated Token used to authenticate request before
+processing generate by TCU system.
+String
+Form four index number
+
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+
+Field Format
+
+Usage
+
+Description
+
+String,15
+
+Mandatory
+
+Form four index number
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+The body of the response includes the information :
+form four index number, status code and status description
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 20
+Varchar, 128
+
+Description
+List of index numbers
+Service response status code
+Description of service response status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno>S0001/0018/2019</f4indexno>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+37
+
+<f4indexno>S0001/0118/2019</f4indexno>
+<StatusCode>224</StatusCode>
+<StatusDescription>You have no admission to this institution. </StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.14 Submit Internal Transfers
+Web Service Method
+
+Description
+
+Submit internal transfers
+
+An applicant who has been admitted but wishes to transfer to another
+programme within the same institution.
+
+Url: https://api.tcu.go.tz/admission/submitInternalTransfers
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i.
+ii.
+iii.
+iv.
+v.
+
+Form four index number
+Form six index number
+Previous Programme Code
+Current Programme Code
+Gender
+
+Input
+submitInternalTransfers
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken String
+System generated Token used to authenticate request before
+processing generate by TCU system.
+Body
+i.
+String
+Form four index number
+ii.
+String
+Form six index number
+iii.
+String
+Previous Programme Code
+iv.
+String
+Current Programme Code
+v.
+
+Character
+Gender
+
+38
+
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+f6indexno
+CurrentProgrammeCode
+PreviousProgrammeCode
+Gender
+
+Field Format
+
+Usage
+
+Description
+
+String,15
+String,15
+Varchar,5
+Varchar,5
+Character,1
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+Form four index number
+Form six index number
+Current programme code
+Previous programme code
+Applicant’s sex (M or F)
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information:
+form four index number, status code and status description
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 20
+Varchar, 128
+
+Description
+List of index numbers
+Service response status code
+Description of service response status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno>S0001/0018/2015</f4indexno>
+<f6indexno>S0001/0018/2019</f6indexno>
+<Gender>M</ Gender >
+<CurrentProgrammeCode>DM002</CurrentProgrammeCode>
+<PreviousProgrammeCode>DM001</PreviousProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+39
+
+<Response>
+<ResponseParameters>
+<f4indexno>S0001/0018/2015</f4indexno>
+<StatusCode>208</StatusCode>
+<StatusDescription>The applicant has already been submitted
+previously <StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.15 Submit Inter-Institutional Transfers
+Web Service Method
+
+Description
+
+Submit inter-institutional
+transfers
+
+An applicant who has been admitted and wishes to transfer to another
+institution.
+
+Url: https://api.tcu.go.tz/admission/submitInterInstitutionalTransfers
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i.
+ii.
+iii.
+iv.
+v.
+
+Form four index number
+Form six index number
+Previous Programme Code
+Current Programme Code
+Gender
+
+Input
+requestConfirmationCode
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToke String System generated Token used to authenticate request before
+n
+processing generate by TCU system.
+Body
+i.
+String
+Form four index number
+ii.
+String
+Form six index number
+iii.
+String
+Previous Programme Code
+iv.
+String
+Current Programme Code
+v.
+Character
+Gender
+
+40
+
+(b) Request Payload
+Attribute, Type &
+Length
+f4indexno
+f6indexno
+Gender
+CurrentProgrammeCode
+PreviousProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+String,15
+String,15
+Character,1
+Varchar,5
+Varchar,5
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+Form four index number
+Form six index number
+Applicant’s sex (M or F)
+Current programme code
+Previous programme code
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information:
+form four index number, status code and status description
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 20
+Varchar, 128
+
+Description
+List of index numbers
+Service response status code
+Description of service response status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<f4indexno>S0001/0018/2015</f4indexno>
+<f6indexno>S0001/0018/2019</f6indexno>
+<Gender>F</ Gender >
+<CurrentProgrammeCode>DM002</CurrentProgrammeCode>
+<PreviousProgrammeCode>DM001</PreviousProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+41
+
+<ResponseParameters>
+<f4indexno>S0001/0118/2019</f4indexno>
+<StatusCode>224</StatusCode>
+<StatusDescription>You have no admission to this institution.</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.16 Get applicants’ Verification Status
+Web Service Method
+
+Description
+
+Get Applicant’s Verification
+Status
+
+•
+•
+
+Get applicants’ Verification Status
+Download a list of applicants with their verification status
+
+Url: https://api.tcu.go.tz/applicants/getApplicantVerificationStatus
+Call method: POST
+Note: This is an alternative to broadcasting the admission verification status (PUSH from TCU’s
+Side). Now HEIs can PULL the admission verification status
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getApplicantVerificationStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+system.
+Body
+i. String
+Programme code
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 5
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+42
+
+Body
+
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+AdmissionStatus
+VerificationStatusCode
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 100
+Varchar, 6
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s admission status
+Applicant’s verification status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>DM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>DM023</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<StatusDescription>The operation was performed
+successfully</StatusDescription>
+<ProgrammeCode> DM023</ProgrammeCode>
+<Applicant>
+<f4indexno> S1001/0012/2016</f4indexno>
+< VerificationStatusCode > 232</ VerificationStatusCode >
+<AdmissionStatus>Did not meet minimum
+requirements</AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0013/2016</f4indexno>
+< VerificationStatusCode > 232</ VerificationStatusCode >
+<AdmissionStatus>Failed Mandatory subject</AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0042/2016</f4indexno>
+43
+
+< VerificationStatusCode >232 </ VerificationStatusCode >
+<AdmissionStatus>Does not meet minimum
+entry requirements</AdmissionStatus>
+</Applicant>
+<Applicant>
+<f4indexno> S1001/0016/2016</f4indexno>
+< VerificationStatusCode >231 </ VerificationStatusCode >
+<AdmissionStatus>Qualified</AdmissionStatus>
+</Applicant>
+</ResponseParameters>
+</Response>
+
+3.17 Submit enrolled/registered students into undergraduate programmes
+Web Service Method
+
+Description
+
+Submit
+undergraduate
+enrolled/registered
+students
+
+Submit the list of registered/enrolled students into the undergraduate
+programme to TCU in the academic year. This endpoint is used to submit
+students enrolled in all programmes from Certificate to Bachelor degrees
+in university institutions and students registered into Bachelor
+programmes in Non-University institutions.
+
+Url: https://api.tcu.go.tz/applicants/submitEnrolledStudents
+Call method: POST
+(a) Request Parameters
+Name
+
+i.
+ii.
+iii.
+iv.
+v.
+vi.
+vii.
+viii.
+ix.
+x.
+xi.
+xii.
+xiii.
+xiv.
+xv.
+xvi.
+xvii.
+xviii.
+xix.
+
+First name
+Middle name
+Surname
+Gender
+Nationality
+Date of birth
+Programme category
+Field of specialization
+Year of study
+Study mode
+Status of whether repeating a year or not
+Entry mode (qualification)
+Sponsorship information
+Physical challenges/impairment
+F4 index number
+Programme name
+Registration number
+Programme code
+Year of admission
+44
+
+Direction
+Type
+
+Input
+submitEnrolledStudents
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+Body
+Request Body Section
+Contains Elements
+Body contains the names, form four index number, Gender,
+Nationality, Date of birth, Programme category, Field of
+specialization, Year of study, Study mode, Status of whether
+repeating a year or not, Entry mode (qualification),
+Sponsorship information, Physical challenges/impairment,
+Programme name, Registration number, Programme code
+and Year of admission
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Nationality
+vi. Year
+Date of birth e.g. 1981
+vii. String
+Programme category e.g. “Bachelor Degree”
+viii. String
+Field of specialization e.g. “Architecture”
+ix. String
+Year of study e. g. “First Year”
+45
+
+x. String
+Study mode e.g. “Full Time”
+xi. String
+Status of whether repeating a year or not e.g.
+for student repeating the year, the status is
+“YES”
+xii. String
+Entry mode (qualification)
+xiii. String
+Sponsorship information
+xiv. String
+Physical challenges/impairment,
+xv. String
+Form Four Index Number in given format.
+For applicants with NECTA certificate the
+format for Form Four Index Number is
+“S1001/0012/2014”
+xvi. String
+Programme name
+xvii.
+
+String
+Registration number issued by the institution to
+a student during registration
+
+xviii.
+
+String
+Programme code
+
+xix. Year
+Year of admission e.g. 2017
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+Mname
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+F4indexno
+
+Varchar, 35
+
+Mandatory
+
+Students first name as appearing on the form four
+certificate
+Students Middle/Second name as appearing on the
+form four certificate
+Students surname as appearing on the form four
+certificate
+Form four index number
+
+46
+
+Attribute, Type &
+Length
+Gender
+Nationality
+DateOfBirth
+ProgrammeCategory
+
+Field
+Format
+Varchar,2
+Varchar,50
+Year,4
+Varchar,50
+
+Usage
+
+Description
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+Specialization
+AdmissionYear
+
+Varchar,50
+Year,4
+
+Mandatory
+Mandatory
+
+ProgrammeCode
+RegistrationNumber
+ProgrammeName
+YearOfStudy
+StudyMode
+IsYearRepeat
+
+Varchar, 10
+Varchar, 50
+Varchar, 200
+Varchar, 15
+Varchar, 15
+Varchar, 3
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+EntryMode
+
+Varchar, 10
+
+Mandatory
+
+Sponsorship
+
+Varchar, 150
+
+Mandatory
+
+PhysicalChallenges
+
+Varchar, 150
+
+Mandatory
+
+Students sex
+Nationality of the student
+Student’s year of birth
+Category of the programme the student is
+undertaking e.g. “Bachelor Degree”
+Field of specialization
+Year the student was admitted into the programme
+e.g. 2018
+Programme Code
+Student’s registration number
+Programme name
+Student’s year of study
+Mode of study
+Status whether the student is repeating a year or
+not. The values should be either “YES” or “No”
+Student’s mode of entry e.g. “Form Six” or
+“Diploma”
+Student’s Sponsorship information e.g. “HESLB” for
+those receiving loans from HESLB
+Physical challenges or impairments if any.
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Student
+registration number, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+RegistrationNumber
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 35
+Varchar, 50
+Varchar, 128
+
+Description
+Registration Number
+Service Status Code
+Description of Status Code
+
+47
+
+Example request
+<?xml version=”1.0” encoding=” UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>UDSM</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>xxxxxx</Fname>
+<Mname></Mname>
+<Surname>zzzzzzz</Surname>
+<F4indexno>TZ76666668</F4indexno>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<DateOfBirth>1982</DateOfBirth>
+<ProgrammeCategory>Diploma</ProgrammeCategory>
+<Specialization>Health Sciences</Specialization>
+<AdmissionYear>2018</AdmissionYear>
+<ProgrammeCode>CW001</ProgrammeCode>
+<RegistrationNumber>TZ017/9999/2018</RegistrationNumber>
+<ProgrammeName>Bsc in applied Chemistry</ProgrammeName>
+<YearOfStudy>Second Year</YearOfStudy >
+<StudyMode>Full Time</StudyMode >
+<IsYearRepeat>NO</IsYearRepeat >
+<EntryMode>Diploma</EntryMode >
+<Sponsorship>ZHELB</Sponsorship >
+<PhysicalChallenges>None</PhysicalChallenges>
+</RequestParameters>
+</Request>
+Example response
+<?xml version=”1.0” encoding=” UTF-8”?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<RegistrationNumber>TZ017/9999/2018</RegistrationNumber>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.18 Submit graduates
+Web Service Method
+
+Description
+Submit to TCU the list of graduates in the graduation year. This endpoint is used
+to submit graduates for all programmes from Certificate to PhD from university
+Submit graduates
+institutions and Bachelor graduates from Non-University institutions.
+Url: https://api.tcu.go.tz/applicants/submitGraduates
+48
+
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. First name
+ii. Middle name
+iii. Surname
+iv. Gender
+v. Registration number
+vi. Field of specialization
+vii. Category of award
+viii. Award class
+ix. Award name
+x. Grade Points Average (GPA)
+xi. Graduation year
+xii. Registration year
+xiii. F4 index number
+xiv. Programme code
+xv. National Identification Number (NIN- Issued by NIDA)
+xvi. Physical challenges/impairment
+Input
+submitGraduates
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken String System generated Token used to authenticate request
+before processing generate by TCU System.
+Body
+
+Request Body Section
+Contains Elements
+Body contains the names, form four index number, Gender,
+Registration number, Programme code, field of specialization,
+category of the award, award classification (class), name of the
+award, GPA, graduation year, registration year, physical
+challenges/disability and National Identification Number (NIN)
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+49
+
+Surname
+iv. Character
+Gender
+v. String
+Field of specialization e.g. “Architecture”
+vi. String
+Category of award
+vii. String
+Award class
+viii. String
+Award name
+ix. String
+Grade Points Average (GPA)
+x. String
+Graduation year
+xi. String
+Registration year
+xii. String
+Form Four Index Number in given format.
+For applicants with NECTA certificate the
+format for Form Four Index Number is
+“S1001/0012/1980”
+xiii. String
+Programme code
+xiv. String
+Registration number issued by the institution to a
+student during registration
+xv. String
+National Identification Number
+xvi. String
+Physical challenge(s)/impairment
+
+50
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+Mname
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+F4indexno
+Gender
+ProgrammeCode
+RegistrationNumber
+FieldOfSpecialization
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+Category of the award, e.g. “Bachelor Degree”
+
+Mandatory
+Mandatory
+
+Classification of the award, e.g. “First Class”
+The name of the award/programme
+
+GPA
+GraduationYear
+RegistrationYear
+NationalIdNumber
+
+Varchar, 35
+Varchar,2
+Varchar, 10
+Varchar, 50
+Varchar,
+255
+Varchar,
+100
+Varchar, 30
+Varchar,
+255
+Varchar, 5
+Varchar, 6
+Varchar, 6
+Varchar, 30
+
+The graduate's first name as appearing on the Form
+Four certificate
+The graduate's Middle/Second name as appearing
+on the Form Four certificate
+The graduate's surname as appearing on the Form
+Four certificate
+Form four index number
+Graduates sex
+Programme Code
+Graduates’ registration number
+Graduates' area of specialization
+
+Mandatory
+Mandatory
+Mandatory
+Optional
+
+PhysicalChallenges
+
+Varchar,200
+
+Mandatory
+
+Overall scored GPA for classified degrees
+The year of graduation
+The year registered in the programme
+National Identification Number (NIN) issued by
+NIDA
+Graduates' disability or impairment
+
+AwardCategory
+AwardClass
+AwardName
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Student registration number, status code and status
+description objects
+
+51
+
+(d) Response Payload
+Attribute, Type & Length
+RegistrationNumber
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 35
+Varchar, 50
+Varchar, 128
+
+Description
+Registration Number
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>XYZ</Username>
+<SessionToken>sWqW8majE2T22M4cerT</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>JUMA</Fname>
+<Mname>M</Mname>
+<Surname>HAMZA</Surname>
+<F4indexno>S1546/0122/1980</F4indexno>
+<Gender>M</Gender>
+<PhysicalChallenges>None</PhysicalChallenges>
+<FieldOfSpecialization>Architecture</FieldOfSpecialization>
+<AwardCategory>Bachelor Degree</AwardCategory>
+<AwardClass> Upper Second</AwardClass>
+<AwardName>Bachelor of Architecture</AwardName>
+<GPA>4.0</GPA>
+<RegistrationNumber>8228/T.1991</RegistrationNumber>
+<GraduationYear>2019</GraduationYear>
+<RegistrationYear>2014</RegistrationYear>
+<ProgrammeCode>XY001</ProgrammeCode>
+<NationalIdNumber>19620228-00001-00001-19</NationalIdNumber>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<RegistrationNumber>8228/T.1991</RegistrationNumber>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+52
+
+3.19 Submit Institution Staff
+Web Service Method
+Submit Institution
+Staff
+
+Description
+Submit to TCU the list of both academic and administrative staff
+
+Url: https://api.tcu.go.tz/applicants/submitInstitutionStaff
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. First name
+ii. Middle name
+iii. Surname
+iv. Gender
+v. Tittle
+vi. Email
+vii. Highest qualification
+viii. Employment status
+ix. Source institution
+x. Year of birth
+xi. Nationality
+xii. Physical challenges
+xiii. Staff rank
+xiv. Staff role
+xv. Level of teaching
+xvi. Staff specialization
+xvii. Staff Identification Number
+xviii. National Identification Number (NIN- Issued by NIDA)
+Input
+submitInstitutionStaff
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+Body
+Request Body Section
+Contains Elements
+Body contains the names, tittle, gender, highest
+qualifications, source institution, employment status, year
+of birth, nationality, physical challenges, staff rank, staff
+53
+
+role, email address, level of teaching, staff field of
+specialization, staff Identification Number and National
+Identification Number (NIN)
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Staff specialization e.g. “Architecture”
+vi. String
+Tittle
+vii. String
+Email
+viii. String
+Highest qualification
+ix. String
+Employment status
+x. String
+Source institution
+xi. String
+Year of birth
+xii. String
+Nationality
+xiii. String
+Physical challenges
+xiv. String
+Staff rank
+xv. String
+Staff role
+54
+
+xvi. String
+Level of teaching
+xvii.
+
+String
+Staff Identification Number
+
+xviii.
+
+String
+National Identification Number
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+Mname
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+Tittle
+Gender
+HighestQualifications
+
+Varchar, 5
+Varchar,2
+Varchar, 20
+
+Mandatory
+Mandatory
+Mandatory
+
+EmploymentStatus
+StaffSpecialization
+
+Varchar, 50
+Varchar,
+255
+Varchar,
+200
+Varchar,
+255
+Varchar,
+255
+Varchar, 50
+
+Mandatory
+Mandatory
+
+Staff first name as appearing on the form four
+certificate/payroll
+Staff Middle/Second name as appearing on the form
+four certificate/payroll
+Staff surname as appearing on the form four
+certificate/payroll
+Staff tittle/salutation
+Staff sex
+The highest level of education attained e.g. PhD,
+Master’s Degree etc.
+The employment status e.g. “Full Time”
+Staff field of specialization e.g. ICT
+
+Varchar, 6
+Varchar,
+255
+Varchar,
+255
+Varchar,
+255
+
+Mandatory
+Mandatory
+
+Staff rank e.g. Senior Lecturer, Associate Professor,
+Director etc.
+Staff role in the institution e.g. “Academic Staff”,
+“Administrative Staff” or “Both Academic and
+Administrative Staff”
+The year of birth e.g. 1972
+Staff nationality
+
+Mandatory
+
+Staff email address
+
+Mandatory
+
+The highest level the staff is allowed to teach based
+on his qualifications e.g. Tutorial Assistants are
+allowed to teach Diploma and Certificate students
+
+SourceInstitution
+PhysicalChallenges
+StaffRank
+StaffRole
+
+YearOfBirth
+Nationality
+Email
+LevelOfTeaching
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+55
+
+The institution at which the staff is permanently
+employed
+Physical challenges or impairment
+
+Attribute, Type &
+Length
+StaffId
+NationalIdNumber
+
+Field
+Format
+Varchar,
+255
+Varchar, 30
+
+Usage
+
+Description
+
+Mandatory
+
+Staff Identification Number
+
+Optional
+
+National Identification Number (NIN) issued by
+NIDA
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Staff Identification number, status code and status
+description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StaffId
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 35
+Varchar, 50
+Varchar, 128
+
+Description
+Staff Identification Number
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>XYZ</Username>
+<SessionToken> sWqW8majE2T22M4cerT </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>HAMISI</Fname>
+<Mname>M.</Mname>
+<Surname> HAMISI </Surname>
+<Tittle>Dr.</Tittle>
+<Gender>M</Gender>
+<HighestQualifications>PhD</HighestQualifications>
+<EmploymentStatus>Full time</EmploymentStatus>
+<SourceInstitution> Ardhi University</SourceInstitution>
+<YearOfBirth>1962</YearOfBirth>
+<Nationality>Tanzanian</Nationality>
+<PhysicalChallenges>None</PhysicalChallenges>
+56
+
+<StaffRank>Senior Lecturer</StaffRank>
+<Email>hamisi.hamza@xyz.ac.tz</Email>
+<StaffRole>Academic Staff</StaffRole>
+<LevelOfTeaching>PhD</LevelOfTeaching>
+<StaffSpecialization>ICT</StaffSpecialization>
+<StaffId>PF/1989/AC</StaffId>
+<NationalIdNumber>19620228-00001-00001-19</NationalIdNumber>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<StaffId> PF/1989/AC < /StaffId >
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.20 Get verification status for internally transferred students
+Web Service Method
+
+Description
+
+Get verification status for
+internally transferred students
+
+Download applicants who have requested for internal transfers and
+their TCU verification status
+
+Url: https://api.tcu.go.tz/applicants/getInternalTransferStatus
+Call method: POST
+Note: This is an alternative to broadcasting the internal transfer verification status (PUSH from
+TCU’s Side). Now HEIs can PULL the internal transfer verification status
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getInternalTransferStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+system.
+57
+
+Body
+
+i.
+
+String
+Programme code
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 5
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Verification Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+VerificationStatus
+VerificationStatusCode
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 100
+Varchar , 6
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s TCU verification status
+Applicant’s TCU verification status Code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>MN</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ389i</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>MN062</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="UTF-8" ?>
+<Response>
+<ResponseParameters>
+
+58
+
+<StatusCode>200</StatusCode> <StatusDescription>Operation was
+successful</StatusDescription>
+<ProgrammeCode>MN062</ProgrammeCode>
+<Applicant>
+<f4indexno>S1025/0058/2013</f4indexno>
+<VerificationStatusCode>231</ VerificationStatusCode >
+<VerificationStatus>APPROVED</VerificationStatus>
+</Applicant>
+<Applicant>
+<f4indexno>S0149/0070/2004</f4indexno>
+<VerificationStatusCode>231</ VerificationStatusCode >
+<VerificationStatus>APPROVED</VerificationStatus>
+</Applicant>
+<Applicant>
+<f4indexno>S0931/0188/2015</f4indexno>
+<VerificationStatusCode>231</ VerificationStatusCode >
+<VerificationStatus>APPROVED</VerificationStatus>
+</Applicant>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.21 Get verification status for inter-institutional transferred students
+Web Service Method
+
+Description
+
+Get verification status for
+inter-institutional
+transferred students
+
+Download applicants who have requested for inter-institutional (from
+one institution to another) transfers and their TCU verification status
+
+Url: https://api.tcu.go.tz/applicants/getInterInstitutionalTransferStatus
+Call method: POST
+Note: This is an alternative to broadcasting the inter-institutional transfer verification status (PUSH
+from TCU’s Side). Now HEIs can PULL the inter-institutional transfer verification status
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getInterInstitutionalTransferStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+59
+
+system.
+Body
+
+i.
+
+String
+Programme code
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 5
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Verification Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+VerificationStatus
+VerificationStatusCode
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 100
+Varchar, 6
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s TCU verification status
+Applicant’s TCU verification status Code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>MN</Username>
+<SessionToken>OTcyMURGMTY5QTRENU3MUJ389i</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>MN068</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="UTF-8" ?>
+<Response>
+60
+
+<ResponseParameters>
+<StatusCode>200</StatusCode> <StatusDescription>Operation was
+successful</StatusDescription>
+<ProgrammeCode>MN068</ProgrammeCode>
+<Applicant>
+<f4indexno>S1025/0058/2013</f4indexno>
+<VerificationStatusCode>231</ VerificationStatusCode >
+<VerificationStatus>APPROVED</VerificationStatus>
+</Applicant>
+<Applicant>
+<f4indexno>S0149/0070/2004</f4indexno>
+<VerificationStatusCode>231</ VerificationStatusCode >
+<VerificationStatus>APPROVED</VerificationStatus>
+</Applicant>
+<Applicant>
+<f4indexno>S0931/0188/2015</f4indexno>
+<VerificationStatusCode>231</ VerificationStatusCode >
+<VerificationStatus>APPROVED</VerificationStatus>
+</Applicant>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.22 Restore the cancelled admission
+Web Service Method
+Restore the cancelled
+admission
+
+Description
+Restore admission for applicants who previously cancelled their
+admissions
+
+Url: https://api.tcu.go.tz/admission/restoreCancelledAdmission
+Call method: POST
+(a) Request Parameters
+i.
+ii.
+
+Name
+Direction
+Type
+
+Form four index number
+Programme code
+
+Input
+restoreCancelledAdmission
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate request
+before processing generate by TCU system.
+Body
+
+I.
+
+String
+61
+
+Form Four Index Number in given format.
+Form Four Index Number format “S1001/0012/2018”
+II.
+
+String
+Programme Code
+
+(b) Request Payload
+Attribute, Type
+& Length
+f4indexno
+
+Field
+Format
+Varchar, 20
+
+Usage
+
+Description
+
+Mandatory
+
+ProgrammeCode
+
+Varchar, 8
+
+Mandatory
+
+Form Four Index Number in specific format
+Form Four Index Number format
+“S1001/0012/2018”
+Programme code as appearing in the Undergraduate
+Admissions Guidebook
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant Status
+and error code objects
+
+(d) Response Payload
+Attribute, Type & Length
+f4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 15
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service response status code
+Description of service response status code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>UDSM</Username>
+< SessionToken>OTcyMURGMTY5QTRENU3MUJ</SessionToken>
+</UsernameToken>
+<RequestParameters >
+<f4indexno> S1001/0012/2018</f4indexno>
+<ProgrammeCode>UD009</ ProgrammeCode >
+</RequestParameters>
+62
+
+</Request>
+Example response
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Response>
+<ResponseParameters>
+<f4indexno> S1001/0012/2018</f4indexno>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.23 Submit students' dropouts
+Web Service Method
+Submit students dropouts
+
+Description
+Add/Submit to TCU students who dropped their studies
+
+Url: https://api.tcu.go.tz/applicants/submitStudentsDropOuts
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. First name
+ii. Middle name
+iii. Surname
+iv. Gender
+v. Form Four index number
+vi. Year terminated
+vii. Year of study
+viii. Termination reason(s)
+ix. Registration number
+x. Programme category
+xi. Programme name
+xii. Programme code
+Input
+submitStudentsDropOuts
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+
+63
+
+SessionToken
+
+Body
+
+String
+
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+Request Body Section
+Contains Elements
+Body contains the names, gender, form four index number,
+year terminated, year of study, termination reason(s),
+registration number, programme category, programme
+name and programme code.
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Year terminated
+vi. String
+Termination reason
+vii. String
+Programme category
+viii. String
+Programme name
+ix. String
+Programme code
+x. String
+Form four index number
+xi. String
+Registration number
+xii. String
+Year of study
+
+64
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+Mname
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+F4indexno
+Gender
+YearTerminated
+YearOfStudy
+TerminationReason
+RegistrationNumber
+ProgrammeCategory
+
+Varchar, 20
+Varchar,2
+Varchar, 4
+Varchar, 15
+Varchar, 255
+Varchar, 255
+Varchar, 255
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+ProgrammeName
+ProgrammeCode
+
+Varchar, 255
+Varchar, 255
+
+Mandatory
+Mandatory
+
+Student first name as appearing on the form four
+certificate
+Student Middle/Second name as appearing on the
+form four certificate
+Student surname as appearing on the form four
+certificate
+The form four index number
+Student sex
+Year a student terminated his/her studies e.g. 2019
+Year of study e.g. “First Year”
+The reasons for dropping studies
+Student registration number
+The programme level e.g. “Bachelor Degree”,
+“Master’s Degree” etc.
+The programme name
+The programme name as appearing on the
+Undergraduate Admissions Guidebook
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Student
+form four index number, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+F4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 20
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service Status Code
+Description of Status Code
+
+65
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>XYZ</Username>
+<SessionToken> sWqW8majE2T22M4cerT456i </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>HAMISI</Fname>
+<Mname>M</Mname>
+<Surname>HAMZA</Surname>
+<Gender>M</Gender>
+<F4indexno>S1111/0001/2020</F4indexno>
+<YearTerminated>2019</YearTerminated>
+<YearOfStudy>First Year</ YearOfStudy >
+<TerminationReason>Failure to pay school fees</TerminationReason>
+<RegistrationNumber>T.2008/0002/1</RegistrationNumber>
+<ProgrammeCategory>Bachelor Degree</ProgrammeCategory>
+<ProgrammeName>Bachelor of Architecture</ProgrammeName>
+<ProgrammeCode>NM009</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>208</StatusCode>
+<F4indexno>S1111/0001/2020</F4indexno>
+<StatusDescription>The student has already been submitted
+previously</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.24 Submit students who postponed studies
+Web Service Method
+Submit students who
+postponed their studies
+
+Description
+Submit students who postponed studies in the current academic year
+
+Url: https://api.tcu.go.tz/applicants/submitPostponedStudents
+Call method: POST
+
+66
+
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. First name
+ii. Middle name
+iii. Surname
+iv. Gender
+v. Form Four index number
+vi. Postponement year
+vii. Year of study
+viii. Reason for postponement
+ix. Registration number
+x. Programme name
+xi. Programme code
+Input
+submitPostponedStudents
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+Body
+Request Body Section
+Contains Elements
+Body contains the names, gender, form four index number,
+postponement year, year of study, postponement reason(s),
+registration number, programme name and programme
+code.
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Postponement reason
+67
+
+vi. String
+Postponement year
+vii. String
+Programme name
+viii. String
+Programme code
+ix. String
+Form four index number
+x. String
+Registration number
+xi. String
+Year of study
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+Mname
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+F4indexno
+Gender
+RegistrationNumber
+
+Varchar, 20
+Varchar,2
+Varchar,
+255
+Varchar, 15
+Varchar,
+255
+Varchar,
+255
+Varchar,
+255
+Varchar, 10
+
+Mandatory
+Mandatory
+Mandatory
+
+Student first name as appearing on the form four
+certificate
+Student Middle/Second name as appearing on the
+form four certificate
+Student surname as appearing on the form four
+certificate
+The form four index number
+Student sex
+Student registration number
+
+Mandatory
+Mandatory
+
+Year of study e.g. “First Year”
+Postponement year e.g. 2018
+
+Mandatory
+
+The reasons for postponing studies
+
+Mandatory
+
+The programme name
+
+Mandatory
+
+The programme name as appearing on the
+Undergraduate Admissions Guidebook
+
+YearOfStudy
+PostponmentYear
+PostponmentReason
+ProgrammeName
+ProgrammeCode
+
+68
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Student form four index number, status code and status
+description objects
+
+(d) Response Payload
+Attribute, Type & Length
+F4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 20
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>XYZ</Username>
+<SessionToken> sWqW8majE2T22M4cerT456i </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>HAMISI</Fname>
+<Mname>M</Mname>
+<Surname>HAMZA</Surname>
+<Gender>M</Gender>
+<F4indexno>S1111/0001/2020</F4indexno>
+<RegistrationNumber>T.2008/0002/1</RegistrationNumber>
+<YearOfStudy>First Year</YearOfStudy>
+<PostponmentYear>2018</PostponmentYear>
+<PostponmentReason>Failure to pay fees</PostponmentReason>
+<ProgrammeCode>NM009</ProgrammeCode>
+<ProgrammeName>Bachelor of Architecture</ProgrammeName>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+69
+
+<StatusCode>200</StatusCode>
+<F4indexno>S1111/0001/2020</F4indexno>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.25 Submit admitted students into non-degree programmes
+Web Service Method
+Submit admitted
+students into nondegree programmes
+
+Description
+Add/submit students admitted into non-degree programmes (Certificates,
+Diplomas or Foundation Programme). This endpoint is used by university
+institutions only.
+
+Url: https://api.tcu.go.tz/applicants/submitAdmittedNonDegree
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. Form Four index number
+ii. Form Six index number/AVN
+iii. Certificate registration number
+iv. Gender
+v. Nationality
+vi. Impairment
+vii. Date of birth
+viii. Programme Code
+ix. Programme Name
+x. Applicant Category
+Input
+submitAdmittedNonDegree
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+Body
+Request Body Section
+Contains Elements
+Body contains form four index number, form six index
+number, certificate registration number/AVN, date of birth,
+impairment, gender, applicant category, nationality,
+70
+
+programme name and programme code.
+i.
+
+String
+
+Form four index number
+
+ii. String
+Form six index number String
+iii. Character
+Gender
+iv. String
+Certificate registration number
+v. String
+Applicant category
+vi. String
+Programme code
+vii. String
+Programme name
+viii. String
+Date of birth
+ix. String
+Impairment
+x. String
+Nationality
+(b) Request Payload
+Attribute, Type &
+Length
+F4indexno
+F6indexno
+CertificateRegNumb
+
+Field
+Format
+Varchar, 35
+Varchar, 35
+Varchar, 55
+
+Usage
+
+Description
+
+Mandatory
+Optional
+Optional
+
+Gender
+Nationality
+Impairment
+
+Varchar, 20
+Varchar,255
+Varchar,
+255
+Varchar, 15
+Varchar,
+255
+
+Mandatory
+Mandatory
+Mandatory
+
+The form four index number
+The form six index number
+Certificate registration number for applicants with
+certificate or AVN for applicants with diploma
+qualifications
+Student sex
+Student nationality
+Student impairment/disability
+
+DateOfBirth
+ApplicantCategory
+
+Mandatory
+Mandatory
+71
+
+Date of birth e.g. “28-02-1978”
+Category of the programme an applicant was
+admitted to e.g. “Diploma”, “Certificate” or”
+
+Attribute, Type &
+Length
+ProgrammeName
+ProgrammeCode
+
+Field
+Format
+Varchar,
+255
+Varchar, 10
+
+Usage
+
+Description
+
+Mandatory
+
+Foundation programme”
+The programme name
+
+Mandatory
+
+The programme name as appearing on the
+Undergraduate Admissions Guidebook
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Student form four index number, status code and status
+description objects
+
+(d) Response Payload
+Attribute, Type & Length
+F4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 20
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>XYZ</Username>
+<SessionToken>sWqW8majE2T22M4cerT456i </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<F4indexno>S1111/0001/2020</F4indexno>
+<F6indexno>S1111/0901/2022</F6indexno>
+<CertificateRegNumb>19TC191919ME</CertificateRegNumb>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<Impairment>None</Impairment>
+<DateOfBirth>28-02-1960</DateOfBirth>
+<ApplicantCategory>Diploma</ApplicantCategory>
+<ProgrammeName>Diploma in Architecture</ProgrammeName>
+72
+
+<ProgrammeCode>NM009</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<F4indexno>S1111/0001/2020</F4indexno>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.26 Get verification status for non-degree admitted students
+Web Service Method
+
+Description
+
+Get verification status for nondegree admitted students
+
+Download admitted students into non-degree programmes and their
+verification status
+
+Url: https://api.tcu.go.tz/applicants/getNonDegreeAdmittedStatus
+Call method: POST
+Note: This is an alternative to broadcasting the admission verification status (PUSH from TCU’s
+Side). Now HEIs can PULL the admission verification status for non-degree admitted students
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getNonDegreeAdmittedStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+system.
+Body
+i. String
+Programme code
+
+73
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 10
+
+Mandatory
+
+Programme code as per TCU Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+AdmissionStatus
+VerificationStatusCode
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 100
+Varchar, 6
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s admission verification status
+Applicant’s admission verification status Code
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>MNX</Username>
+<SessionToken>aTcuM3838jjKLMUOP0jL</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>MNM01</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>210</StatusCode>
+<ProgrammeCode> MNM01</ProgrammeCode>
+<StatusDescription>No Record Found</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+74
+
+3.27 Submit the applicants applied for Postgraduate programmes
+Web Service Method
+Submit the applicants applied
+for Postgraduate programmes
+
+Description
+Submit to TCU the list of applicants who applied for
+Postgraduate degree programmes in University Institutions
+
+Url: https://api.tcu.go.tz/applicants/submitPostgraduateApplicants
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. First name
+ii. Middle name
+iii. Surname
+iv. Form Four index number
+v. Gender
+vi. Nationality
+vii. Impairment
+viii. Date of birth
+ix. Programme Category
+x. Mobile number
+xi. Email address
+xii. Bachelor registration number
+xiii. Masters registration number
+xiv. National Identification Number (NIN)
+xv. Selected Programmes (programme choices)
+xvi. Mode of entry
+Input
+submitPostgraduateApplicants
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken String System generated Token used to authenticate request
+before processing generate by TCU System.
+Body
+
+Request Body Section
+Contains Elements
+Body contains First name, Middle name, Surname, Form Four
+index number, Gender, Nationality, impairment, Date of birth,
+Programme Category, Mobile number, Email address, Bachelor
+registration number, Masters registration number, National
+Identification Number (NIN), Selected Programmes (programme
+75
+
+choices) and Mode of entry.
+i.
+
+String
+Form four index number
+
+ii. String
+First name
+iii. String
+Middle name
+iv. String
+Surname
+v. String
+Gender
+vi. String
+Mobile number
+vii. String
+Programme Category
+viii. String
+Bachelor registration number
+ix. String
+Masters registration number
+x. String
+National Identification Number (NIN)
+xi. String
+Selected Programmes
+xii. String
+Mode of entry
+xiii. String
+Email address
+xiv. String
+Date of birth
+xv. String
+Impairment
+xvi. String
+Nationality
+
+76
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+Mname
+Surname
+F4indexno
+Mobilenumber
+Emailaddress
+Gender
+Nationality
+Impairment
+DateOfBirth
+ProgrammeCategory
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 255
+Varchar, 255
+Varchar, 255
+Varchar, 35
+Varchar, 35
+Varchar, 60
+Varchar, 6
+Varchar,255
+Varchar, 255
+Varchar, 15
+Varchar, 255
+
+Mandatory
+Optional
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+BachelorRegNumb
+MastersRegNumb
+NationalIdNumber
+SelectedProgrammes
+
+Varchar,100
+Varchar,100
+Varchar,255
+Varchar, 255
+
+Mandatory
+Optional
+Optional
+Mandatory
+
+EntryMode
+
+Varchar,255
+
+Mandatory
+
+Applicant first name
+Applicant second name
+Applicant surname
+The form four index number
+Applicant Mobile number
+Applicant Email address
+Applicant sex
+Applicant nationality
+Student impairment/disability
+Date of birth e.g. “28-02-1978”
+Category of the programme an applicant was
+admitted to e.g. “Masters Degree”, “Doctorate
+Degree”
+Bachelor registration number
+Masters registration number
+Applicant National Identification Number (NIN)
+List of programmes (programme codes) an
+applicant has applied for. The codes should be as
+it appears on Postgraduate Admissions
+Guidebook
+Mode of entry
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Student form
+four index number, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+F4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 20
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service Status Code
+Description of Status Code
+77
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>MNX</Username>
+<SessionToken>aTcuM3838jjKLMUOP0jL</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>MICHAEL</Fname>
+<Mname>M</Mname>
+<Surname>JOHN</Surname>
+<F4indexno>S1547/0122/2099</F4indexno>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<DateOfBirth>1994</DateOfBirth>
+<ProgrammeCategory>Masters Degree</ProgrammeCategory>
+<Mobilenumber>079666666 </Mobilenumber>
+<Emailaddress>xyz@gmail.com</Emailaddress>
+<BachelorRegNumb>AGF/0019/11-20291</BachelorRegNumb>
+<MastersRegNumb></MastersRegNumb>
+<Impairment>None</Impairment>
+<NationalIdNumber></NationalIdNumber>
+<SelectedProgrammes>MMMC2,MMMC3,MMC44</SelectedProgrammes>
+<EntryMode>Bachelor degree</EntryMode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>208</StatusCode>
+<F4indexno>S1547/0122/2099</F4indexno>
+<StatusDescription>The student has already been submitted
+previously</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.28 Submit admitted students into Postgraduate programmes
+Web Service Method
+Submit admitted students to
+Postgraduate programmes
+
+Description
+Submit to TCU the list of admitted students into Postgraduate
+degree programmes in the University Institutions
+
+Url: https://api.tcu.go.tz/applicants/submitAdmittedPostgraduate
+Call method: POST
+78
+
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i. First name
+ii. Middle name
+iii. Surname
+iv. Form Four index number
+v. Gender
+vi. Nationality
+vii. Impairment
+viii. Date of birth
+ix. Programme Category
+x. Mobile number
+xi. Email address
+xii. Bachelor registration number
+xiii. Masters registration number
+xiv. National Identification Number (NIN)
+xv. Admitted programme
+xvi. Mode of entry
+xvii. Admission status (for not admitted applicants give reason(s))
+Input
+submitAdmittedPostgraduate
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+Body
+Request Body Section
+Contains Elements
+Body contains First name, Middle name, Surname, Form
+Four index number, Gender, Nationality, impairment, Date
+of birth, Programme Category, Mobile number, Email
+address, Bachelor registration number, Masters
+registration number, National Identification Number (NIN),
+Admitted Programme, Admission Status and Mode of entry.
+i.
+
+String
+Form four index number
+
+ii. String
+First name
+iii. String
+79
+
+Middle name
+iv. String
+Surname
+v. String
+Gender
+vi. String
+Mobile number
+vii. String
+Programme Category
+viii. String
+Bachelor registration number
+ix. String
+Masters registration number
+x. String
+National Identification Number (NIN)
+xi. String
+Admitted Programme
+xii. String
+Mode of entry
+xiii. String
+Email address
+xiv. String
+Date of birth
+xv. String
+Impairment
+xvi. String
+Nationality
+xvii.
+
+String
+Admission status
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 255
+
+Mandatory
+
+Applicant first name
+
+80
+
+Attribute, Type &
+Length
+Mname
+Surname
+F4indexno
+Mobilenumber
+Emailaddress
+Gender
+Nationality
+Impairment
+DateOfBirth
+ProgrammeCategory
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 255
+Varchar, 255
+Varchar, 35
+Varchar, 35
+Varchar, 60
+Varchar, 6
+Varchar,255
+Varchar, 255
+Varchar, 15
+Varchar, 255
+
+Optional
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+BachelorRegNumb
+MastersRegNumb
+NationalIdNumber
+ProgrammeAdmitted
+AdmissionStatus
+EntryMode
+
+Varchar,100
+Varchar,100
+Varchar,255
+Varchar, 10
+Varchar, 255
+Varchar,255
+
+Mandatory
+Optional
+Optional
+Optional
+Mandatory
+Mandatory
+
+Applicant second name
+Applicant surname
+The form four index number
+Applicant Mobile number
+Applicant Email address
+Applicant sex
+Applicant nationality
+Student impairment/disability
+Date of birth e.g. “28-02-1978”
+Category of the programme an applicant was
+admitted to e.g. “Masters Degree”, “Doctorate
+Degree”
+Bachelor registration number
+Masters registration number
+Applicant National Identification Number (NIN)
+Programme the applicant is admitted to
+Applicant’s admission status
+Mode of entry
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Student form four index number, status code and status
+description objects
+
+(d) Response Payload
+Attribute, Type & Length
+F4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 20
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service Status Code
+Description of Status Code
+
+81
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>MNX</Username>
+<SessionToken>aTcuM3838jjKLMUOP0jL</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>MAKAME</Fname>
+<Mname>M</Mname>
+<Surname>HAMZA</Surname>
+<F4indexno>S1547/0122/2099</F4indexno>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<DateOfBirth>1994</DateOfBirth>
+<ProgrammeCategory>Masters Degree</ProgrammeCategory>
+<Mobilenumber>079668866 </Mobilenumber>
+<Emailaddress>axy@yahoo.com</Emailaddress>
+<BachelorRegNumb>AGF/0019/11-20291</BachelorRegNumb>
+<MastersRegNumb></MastersRegNumb>
+<Impairment>None</Impairment>
+<NationalIdNumber></NationalIdNumber>
+<ProgrammeAdmitted>MMMC2 </ProgrammeAdmitted>
+<AdmissionStatus>Admitted</AdmissionStatus>
+<EntryMode>Bachelor degree</EntryMode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<F4indexno>S1547/0122/2099</F4indexno>
+<StatusDescription> Operation was successful </StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.29 Get verification status for admitted students into the Postgraduate programmes
+Web Service Method
+
+Description
+
+Get verification status for
+admitted students into
+Postgraduate programmes
+
+Download admitted students into Postgraduate programmes and their
+verification status
+
+Url: https://api.tcu.go.tz/applicants/getPostgraduateAdmittedStatus
+Call method: POST
+82
+
+Note: This is an alternative to broadcasting the admission verification status (PUSH from TCU’s
+Side). Now HEIs can PULL the admission verification status for admitted students into Postgraduate
+programmes
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getPostgraduateAdmittedStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+system.
+Body
+i. String
+Programme code
+
+(b) Request Payload
+Attribute, Type
+& Length
+ProgrammeCode
+
+Field
+Format
+Varchar, 10
+
+Usage
+
+Description
+
+Mandatory
+
+Programme code as per TCU Postgraduate Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+AdmissionStatus
+VerificationStatusCode
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 255
+Varchar, 6
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s admission verification status
+Applicant’s admission verification status Code
+
+83
+
+Example request
+<?xml version=”1.0” encoding=”UTF-8”?>
+<Request>
+<UsernameToken>
+<Username>MNX</Username>
+<SessionToken>aTcuM3838jjKLMUOP0jL</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>MNXM01</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="UTF-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was successful</StatusDescription>
+<ProgrammeCode> MNXM01</ProgrammeCode>
+<Applicant>
+<f4indexno>S1547/0122/2099</f4indexno>
+<BachelorRegNumber>AGF/0019/11-20291</BachelorRegNumber>
+<VerificationStatusCode>231</VerificationStatusCode>
+<VerificationStatus>Cleared</VerificationStatus>
+<StatusDescription>Has requisite qualifications</StatusDescription>
+</Applicant>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.30 Submit transferred students from one Postgraduate programme to another
+within the same institution or from one institution to another
+Web Service Method
+Submit Postgraduate
+transferred students
+
+Description
+Submit to TCU the list of transferred students into Postgraduate degree
+programmes in University Institutions. The transfer may be from one
+programme to another within the same institution or from one institution
+to another.
+
+Url: https://api.tcu.go.tz/applicants/submitPostgraduateTransfers
+Call method: POST
+(a) Request Parameters
+Name
+
+i. First name
+ii. Middle name
+iii. Surname
+84
+
+Direction
+Type
+
+iv. Form Four index number
+v. Gender
+vi. Nationality
+vii. Date of birth
+viii. Programme Category
+ix. Previous programme code
+x. Current programme code
+Input
+submitPostgraduateTransfers
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken String System generated Token used to authenticate request
+before processing generate by TCU System.
+Body
+
+Request Body Section
+Contains Elements
+Body contains First name, Middle name, Surname, Form Four
+index number, Gender, Nationality, Date of birth, Programme
+Category, Current programme code and previous programme
+code.
+i.
+
+String
+
+Form four index number
+
+ii. String
+First name
+iii. String
+Middle name
+iv. String
+Surname
+v. String
+Gender
+vi. String
+Programme Category
+vii. String
+Current Programme code
+viii. String
+Previous Programme code
+85
+
+ix. String
+Date of birth
+x. String
+Nationality
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+Mname
+Surname
+F4indexno
+Gender
+Nationality
+DateOfBirth
+ProgrammeCategory
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 255
+Varchar, 255
+Varchar, 255
+Varchar, 35
+Varchar, 6
+Varchar,255
+Varchar, 15
+Varchar, 255
+
+Mandatory
+Optional
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+CurrentProgrammeCode
+
+Varchar,10
+
+Optional
+
+PreviousProgrammeCode
+
+Varchar, 10
+
+Optional
+
+Applicant first name
+Applicant second name
+Applicant surname
+The form four index number
+Applicant sex
+Applicant nationality
+Date of birth e.g. “28-02-1978”
+Category of the programme an applicant is
+transferring to e.g. “Masters Degree”,
+“Doctorate Degree”
+The programme code an applicant is
+transferring to
+The Programme the applicant was
+admitted to
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding
+Student form four index number, status code and status
+description objects
+
+(d) Response Payload
+Attribute, Type & Length
+F4indexno
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 20
+Varchar, 50
+Varchar, 128
+
+Description
+Form four index number
+Service Status Code
+Description of Status Code
+86
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>AMM</Username>
+<SessionToken>aTcuM3838jjKLMUOP0jL</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>MAKAME</Fname>
+<Mname>M</Mname>
+<Surname>HAMZA</Surname>
+<F4indexno>S1547/0122/2019</F4indexno>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<DateOfBirth>1994</DateOfBirth>
+<ProgrammeCategory>Masters Degree</ProgrammeCategory>
+<PreviousProgrammeCode>AMMM01</PreviousProgrammeCode>
+<CurrentProgrammeCode>HKM02</CurrentProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<F4indexno>S1547/0122/2019</F4indexno>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.31 Get verification status for transferred students into Postgraduate programmes
+Web Service Method
+
+Description
+
+Get verification status for
+transferred students into
+Postgraduate programmes
+
+Download the transferred students into Postgraduate programmes and
+their verification status
+
+Url: https://api.tcu.go.tz/applicants/getPostgraduateTransferStatus
+Call method: POST
+Note: This is an alternative to broadcasting the admission verification status (PUSH from TCU’s
+Side). Now HEIs can PULL the admission verification status for transferred students into
+Postgraduate programmes
+87
+
+(a) Request Parameters
+Name
+Direction
+Type
+
+i. Programme code
+Input
+getPostgraduateAdmittedStatus
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate
+request before processing generate by TCU
+system.
+Body
+i. String
+Programme code
+
+(b) Request Payload
+Attribute, Type &
+Length
+ProgrammeCode
+
+Field Format
+
+Usage
+
+Description
+
+Varchar, 10
+
+Mandatory
+
+Programme code as per TCU Postgraduate
+Guide Book
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+Status, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+StatusCode
+StatusDescription
+f4indexno
+VerificationStatus
+VerificationStatusCode
+
+Field Format
+Varchar, 50
+Varchar, 128
+Varchar,15
+Varchar , 255
+Varchar, 6
+
+Description
+Service status code
+Description of status code
+Form four index number
+Applicant’s admission verification status
+Applicant’s admission verification status Code
+
+88
+
+Example request
+<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+<UsernameToken>
+<Username>MNX</Username>
+<SessionToken>aTcuM3838jjKLMUOP0jL</SessionToken>
+</UsernameToken>
+<RequestParameters>
+<ProgrammeCode>HMKM02</ProgrammeCode>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="UTF-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<StatusDescription>Operation was successful</StatusDescription>
+<ProgrammeCode> HMKM02</ProgrammeCode>
+<Applicant>
+<F4indexno>S1547/0122/2019</F4indexno>
+<VerificationStatusCode>231</VerificationStatusCode>
+<VerificationStatus>Cleared</VerificationStatus>
+</Applicant>
+</ResponseParameters>
+</Response>
+</xml>
+
+3.32 Submit enrolled/registered students into postgraduate programmes
+Web Service Method
+Submit postgraduate
+enrolled/registered students
+
+Description
+Submit the list of registered/enrolled students into the
+postgraduate programmes to TCU in the academic year. This
+endpoint is used by university institutions.
+
+Url: https://api.tcu.go.tz/applicants/submitEnrolledPostgraduateStudents
+Call method: POST
+(a) Request Parameters
+Name
+
+i.
+ii.
+iii.
+iv.
+v.
+
+First name
+Middle name
+Surname
+Gender
+Nationality
+89
+
+Direction
+Type
+
+vi.
+Year of birth
+vii.
+Award category
+viii.
+Nature of the Programme
+ix.
+Year of study
+x.
+Study mode
+xi.
+Sponsorship information
+xii.
+Physical challenges/impairment
+xiii.
+F4 index number
+xiv.
+F6 index number/Award Verification Number (AVN)
+xv.
+Programme name
+xvi.
+Registration number
+xvii.
+Programme code
+xviii.
+Year of first registration
+xix.
+Expected year of completion
+xx.
+Programme duration
+Input
+submitEnrolledPostgraduateStudents
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String Username provided by TCU
+SessionToken
+String System generated Token used to authenticate request
+before processing generate by TCU System.
+Body
+
+Request Body Section
+Contains Elements
+Body contains the names, form four index number, form six
+index number/AVN, Gender, Nationality, Year of birth, Award
+category, Year of study, Study mode, Nature of the programme,
+Sponsorship information, Physical challenges/impairment,
+Programme name, Registration number, Programme code, Year
+of first registration, Expected year of completion and
+Programme duration
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+90
+
+iv. Character
+Gender
+v. String
+Nationality
+vi. Year
+Year of birth e.g. 1981
+vii. String
+Award category e.g. “Masters Degree”
+viii. String
+Year of study e. g. “First Year”
+ix. String
+Study mode e.g. “Full Time”
+x. String
+Sponsorship information
+xi. String
+Physical challenges/impairment,
+xii. String
+Form Four Index Number in given format.
+For applicants with NECTA certificate the
+format for Form Four Index Number is
+“S1001/0012/2014”
+xiii. String
+Form Six Index Number/Award Verification
+Number (AVN) in given format.
+For applicants with NECTA certificate the
+format for Form Six Index Number is
+“S1001/0512/2014”
+xiv. String
+Programme name
+xv. String
+Registration number issued by the institution to a
+student during registration
+xvi. String
+Programme code
+xvii.
+
+String
+Nature of the Programme
+
+xviii.
+
+String
+
+91
+
+Year of first registration
+xix. String
+Expected year of completion
+xx. Integer
+Programme duration in months e.g. 18
+
+(b) Request Payload
+Attribute, Type &
+Length
+Fname
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+Mname
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+F4indexno
+F6indexno
+
+Varchar, 35
+Varchar, 35
+
+Mandatory
+Mandatory
+
+Gender
+Nationality
+YearOfBirth
+ProgrammeCategory
+
+Varchar,2
+Varchar,50
+Year,4
+Varchar,50
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+Duration
+YearFirstRegistered
+
+Int,4
+Varchar,9
+
+Mandatory
+Mandatory
+
+ExpectedCompletionYear
+
+Varchar,9
+
+Mandatory
+
+ProgrammeNature
+
+Varchar,50
+
+Mandatory
+
+ProgrammeCode
+RegistrationNumber
+ProgrammeName
+
+Varchar, 10
+Varchar, 50
+Varchar,
+200
+Varchar, 15
+Varchar, 15
+Varchar,
+150
+Varchar,
+150
+
+Mandatory
+Mandatory
+Mandatory
+
+Students first name as appearing on the form
+four certificate
+Students Middle/Second name as appearing on
+the form four certificate
+Students surname as appearing on the form
+four certificate
+Form four index number
+Form six index number/Award Verification
+Number (AVN)
+Students sex
+Nationality of the student
+Student’s year of birth
+Category of the programme the student is
+undertaking e.g. “Masters Degree”
+Duration of the programme in months
+The academic year the student was first
+registered into the programme e.g. 2018/2019
+The academic year the student is expected to
+complete his/her studies e.g. 2020/2021
+The way the programme is conducted and
+assessed. e.g. Coursework and Dissertation,
+Thesis
+Programme Code
+Student’s registration number
+Programme name
+
+YearOfStudy
+StudyMode
+Sponsorship
+PhysicalChallenges
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+92
+
+Student’s year of study
+Mode of study
+Student’s Sponsorship information e.g.
+“HESLB” for those receiving loans from HESLB
+Physical challenges or impairments if any.
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Student
+registration number, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+RegistrationNumber
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 35
+Varchar, 50
+Varchar, 128
+
+Description
+Registration Number
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>AXU</Username>
+<SessionToken> aTcuM3838jjKLMUOP0jL </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<Fname>MAKAME</Fname>
+<Mname>MAKAME</Mname>
+<Surname>MAKAME</Surname>
+<F4indexno>S9999/0001/2012</F4indexno>
+<F6indexno>S9999/0500/2015</F6indexno>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<YearOfBirth>1994</YearOfBirth>
+<PhysicalChallenges>NONE</PhysicalChallenges>
+<RegistrationNumber>8228/T.2015</RegistrationNumber>
+<ProgrammeCode>ARM001</ProgrammeCode>
+<ProgrammeName>Msc in Architectural Design</ProgrammeName>
+<ProgrammeCategory>Masters Degree</ProgrammeCategory>
+<ProgrammeNature>Coursework and Dissertation </ProgrammeNature>
+<Duration>3</Duration>
+<YearOfStudy>Second Year</YearOfStudy>
+<StudyMode>Full time</StudyMode>
+<ExpectedCompletionYear>2026/2027</ExpectedCompletionYear>
+<Sponsorship>HESLB</Sponsorship>
+<YearFirstRegistered>2023/2024</YearFirstRegistered>
+93
+
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<RegistrationNumber>8228/T.2015</RegistrationNumber>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.33 Submit foreign applicants who applied for admission to bachelor's degree
+programmes
+Web Service Method
+Submit the foreigners who
+applied for admission
+
+Description
+Submit the list of foreigners who applied for admission to
+bachelor's degree programmes in Tanzania institutions
+
+Url: https://api.tcu.go.tz/applicants/submitForeignApplicants
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i.
+First name
+ii.
+Second name
+iii.
+Surname
+iv.
+Gender
+v.
+Nationality
+vi.
+Year of birth
+vii.
+Email address
+viii.
+Applicant category
+ix.
+Selected programmes (separated by comma)
+Input
+submitForeignApplicants
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as define in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System generated Token used to authenticate
+request before processing generate by TCU
+System.
+94
+
+Body
+
+Request Body Section
+Contains Elements
+Body contains the names, Gender, Nationality, Year of birth,
+Applicant category, list of programmes applied for and
+Email address.
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Nationality
+vi. Year
+Year of birth e.g. 1981
+vii. String
+Email address
+viii. String
+Applicant category
+ix. String
+Selected programmes (separated by comma)
+(b) Request Payload
+Attribute, Type &
+Length
+FirstName
+
+Field
+Format
+Varchar, 35
+
+Usage
+
+Description
+
+Mandatory
+
+SecondName
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+Gender
+Nationality
+YearOfBirth
+
+Varchar,2
+Varchar,50
+Year,4
+
+Mandatory
+Mandatory
+Mandatory
+
+Applicant first name as appearing on the
+applicant’s academic certificate
+Applicant Middle/Second name as appearing
+on the academic certificates
+Applicant surname as appearing on the
+academic certificate
+Applicant sex
+Nationality of the applicant
+Applicant’s year of birth
+
+95
+
+Attribute, Type &
+Length
+ApplicantCategory
+
+Field
+Format
+Varchar,15
+
+Usage
+
+Description
+
+Mandatory
+
+EmailAddress
+SelectedProgrammes
+
+Varchar,50
+Varchar,100
+
+Mandatory
+Mandatory
+
+Category of the qualifications used by the
+applicant to make application i.e. Direct or
+Equivalent
+Applicant’s email address
+List of programmes applied by the applicant
+(separated by comma)
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+Body of the response contains the information regarding Applicant
+email address, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+EmailAddress
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 128
+Varchar, 50
+Varchar, 128
+
+Description
+Email Address
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>AXU</Username>
+<SessionToken> aTcuM3838jjKLMUOP0jL </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<FirstName>MAKAME</FirstName>
+<SecondName>MAKAME</SecondName>
+<Surname>HAMZA</Surname>
+<Gender>M</Gender>
+<Nationality>Ugandan</Nationality>
+<YearOfBirth>1994</YearOfBirth>
+<EmailAddress>axc@tcu.go.tz</EmailAddress>
+<ApplicantCategory>Direct</ApplicantCategory>
+<SelectedProgrammes> AXU23, AXU38, AXU22</SelectedProgrammes>
+</RequestParameters>
+</Request>
+96
+
+Example response
+<?xml version="1.0" encoding="utf-8" ?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<EmailAddress>axc@tcu.go.tz</EmailAddress>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.34 Submit admitted foreigners into bachelor's degree programmes under Direct
+Entry
+Web Service Method
+Submit the admitted
+foreigners under Direct Entry
+
+Description
+Submit the list of foreigners admitted into bachelor's degree
+programmes in Tanzania institutions under Direct Entry
+
+Url: https://api.tcu.go.tz/applicants/submitForeignAdmittedDirect
+Call method: POST
+(a) Request Parameters
+Name
+
+Direction
+Type
+
+i.
+First name
+ii.
+Second name
+iii.
+Surname
+iv.
+Gender
+v.
+Nationality
+vi.
+Year of birth
+vii.
+Email address
+viii.
+Applicant category
+ix.
+Programme code
+x.
+Programme name
+xi.
+F4 Foreign results
+xii.
+F4 Equivalent results
+xiii.
+F6 Foreign results
+xiv.
+F6 Equivalent results
+xv.
+Other qualifications
+xvi.
+How the equivalence was determined
+xvii.
+Criteria used for admission
+xviii.
+Admission status
+Input
+submitForeignAdmittedDirect
+Content type
+Component
+Type
+Header
+Request header section
+97
+
+Component
+Username
+SessionToken
+
+Body
+
+Contains elements as defined in the following table
+Type
+Description
+String
+Username provided by TCU
+String
+System-generated Token used to authenticate
+request before processing generate by the
+TCU System.
+Request Body Section
+Contains Elements
+The body contains the names, Gender, Nationality, Year of
+birth, Applicant category, Email address, programme code,
+Programme name, F4 foreign results, F4 Equivalent results,
+F6 foreign results, F6 Equivalent results, criteria used, how
+the equivalence was determined, admission status and
+other qualifications, if any.
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Nationality
+vi. Year
+Year of birth, e.g. 1981
+vii. String
+Email address
+viii. String
+Applicant category
+ix. String
+Programme code
+x. String
+Programme name
+xi. String
+F4 Foreign results
+98
+
+xii. String
+F4 Equivalent results
+xiii. String
+F6 Foreign results
+xiv. String
+F6 Equivalent results
+xv. String
+Other qualifications
+xvi. String
+How the equivalence was determined
+xvii.
+
+String
+Criteria used for admission
+
+xviii.
+
+String
+Admission status
+
+(b) Request Payload
+Attribute, Type & Length
+FirstName
+
+Field Format
+Varchar, 35
+
+Usage
+Mandatory
+
+SecondName
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+
+Gender
+Nationality
+YearOfBirth
+ApplicantCategory
+
+Varchar,2
+Varchar,50
+Year,4
+Varchar,15
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+EmailAddress
+ProgrammeCode
+
+Varchar,50
+Varchar, 10
+
+Mandatory
+Mandatory
+
+Description
+Applicant first name as appearing on the
+applicant’s academic certificate
+Applicant Middle/Second name as
+appearing on the academic certificates
+Applicant surname as appearing on the
+academic certificate
+Applicant sex
+Nationality of the applicant
+Applicant’s year of birth
+Category of the qualifications used by the
+applicant to make application i.e. Direct or
+Equivalent
+Applicant’s email address
+Programme Code
+
+ProgrammeName
+
+Varchar, 200
+
+Mandatory
+
+Programme name
+
+F4ForeignResults
+
+Varchar, 300
+
+Mandatory
+
+Form four foreign results
+
+F4EquivalentResults
+
+Varchar, 300
+
+Mandatory
+
+F6ForeignResults
+
+Varchar, 300
+
+Mandatory
+
+Form four equivalence to Tanzanian's
+CSEE grading (Results)
+Form six foreign results
+
+99
+
+Attribute, Type & Length
+F6EquivalentResults
+
+Field Format
+Varchar, 300
+
+Usage
+Mandatory
+
+OtherQualifications
+
+Varchar, 300
+
+Optional
+
+Description
+Form six equivalence to Tanzanian's ACSE
+grading (Results)
+Any Other Qualifications used
+
+EquivalenceDetermination
+
+Varchar, 300
+
+Mandatory
+
+How the equivalence was determined
+
+AdmissionCriteria
+AdmissionStatus
+
+Varchar, 300
+Varchar, 128
+
+Mandatory
+Mandatory
+
+Criteria used for admission
+Applicant’s admission status
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+The body of the response contains the information regarding the
+Applicant email address, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+EmailAddress
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 128
+Varchar, 50
+Varchar, 128
+
+Description
+Email Address
+Service Status Code
+Description of Status Code
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>SXU</Username>
+<SessionToken> aTcuM3838jjKLMUOP0jL </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<FirstName>MAKAME</FirstName>
+<SecondName>MAKAME</SecondName>
+<Surname>HAMZA</Surname>
+<Gender>M</Gender>
+<Nationality>Ugandan</Nationality>
+<YearOfBirth>1994</YearOfBirth>
+<EmailAddress>axc@tcu.go.tz</EmailAddress>
+<ApplicantCategory>Direct</ApplicantCategory>
+<ProgrammeCode>SU001</ProgrammeCode>
+<ProgrammeName>Bachelor of Rural Development</ProgrammeName>
+100
+
+<F4ForeignResults>Mathematics-A+, English Language-Chemistry-C </F4ForeignResults>
+<F4EquivalentResults> Mathematics-A, English Language-Chemistry-C</F4EquivalentResults>
+<F6ForeignResults>Entrepreneurship-B, English Language-B</F6ForeignResults>
+<F6EquivalentResults> Entrepreneurship-B, English Language-B </F6EquivalentResults>
+<OtherQualifications> One year of university education in the country of origin
+</OtherQualifications>
+<EquivalenceDetermination> Equivalence obtained from NECTA </EquivalenceDetermination>
+<AdmissionCriteria> ACSE equivalency from NECTA and one-year university education in the
+country of origin </AdmissionCriteria>
+<AdmissionStatus> Admitted </AdmissionStatus>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8”?>
+<Response>
+<ResponseParameters>
+<StatusCode>200</StatusCode>
+<EmailAddress>axc@tcu.go.tz</EmailAddress>
+<StatusDescription>Operation was successful</StatusDescription>
+</ResponseParameters>
+</Response>
+
+3.35 Submit admitted foreigners into bachelor's degree programmes under
+Equivalent Entry
+Web Service Method
+Submit the admitted
+foreigners under Equivalent
+Entry
+
+Description
+Submit the list of foreigners admitted into bachelor's degree
+programmes in Tanzania institutions under Equivalent Entry.
+
+Url: https://api.tcu.go.tz/applicants/submitForeignAdmittedEquivalent
+Call method: POST
+(a) Request Parameters
+Name
+
+i.
+ii.
+iii.
+iv.
+v.
+vi.
+vii.
+viii.
+ix.
+x.
+
+First name
+Second name
+Surname
+Gender
+Nationality
+Year of birth
+Email address
+Applicant category
+Programme code
+Programme name
+101
+
+Direction
+Type
+
+xi.
+F4 Foreign results
+xii.
+F4 Equivalent results
+xiii.
+Diploma name
+xiv.
+Foreign Diploma results/GPA
+xv.
+Other qualifications
+xvi.
+How the equivalence was determined
+xvii.
+Criteria used for admission
+xviii.
+Admission status
+xix.
+Diploma equivalence results/GPA
+Input
+submitForeignAdmittedEquivalent
+Content type
+Component
+Type
+Header
+Request header section
+Contains elements as defined in the following table
+Component
+Type
+Description
+Username
+String
+Username provided by TCU
+SessionToken
+String
+System-generated Token used to authenticate
+request before processing generate by the
+TCU System.
+Body
+Request Body Section
+Contains Elements
+The body contains the names, Gender, Nationality, Year of
+birth, Applicant category, Email address, programme code,
+Programme name, F4 foreign results, F4 Equivalent results,
+Diploma name, Foreign Diploma results/GPA, admission
+criteria used, Diploma equivalence results/GPA, how the
+equivalence was determined, admission status and other
+qualifications, if any.
+i.
+
+String
+First name
+
+ii. String
+Middle name
+iii. String
+Surname
+iv. Character
+Gender
+v. String
+Nationality
+
+102
+
+vi. Year
+Year of birth, e.g. 1981
+vii. String
+Email address
+viii. String
+Applicant category
+ix. String
+Programme code
+x. String
+Programme name
+xi. String
+F4 Foreign results
+xii. String
+F4 Equivalent results
+xiii. String
+Diploma name
+xiv. String
+Foreign Diploma results/GPA
+xv. String
+Diploma equivalence results/GPA
+xvi. String
+Other qualifications
+xvii.
+
+String
+How the equivalence was determined
+
+xviii.
+
+String
+Criteria used for admission
+
+xix. String
+Admission status
+(b) Request Payload
+Attribute, Type & Length
+FirstName
+
+Field Format
+Varchar, 35
+
+Usage
+Mandatory
+
+SecondName
+
+Varchar, 35
+
+Optional
+
+Surname
+
+Varchar, 35
+
+Mandatory
+103
+
+Description
+Applicant first name as appearing on the
+applicant’s academic certificate
+Applicant Middle/Second name as
+appearing on the academic certificates
+Applicant surname as appearing on the
+
+Attribute, Type & Length
+
+Field Format
+
+Usage
+
+Gender
+Nationality
+YearOfBirth
+ApplicantCategory
+
+Varchar,2
+Varchar,50
+Year,4
+Varchar,15
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+EmailAddress
+ProgrammeCode
+ProgrammeName
+F4ForeignResults
+F4EquivalentResults
+
+Varchar,50
+Varchar, 10
+Varchar, 200
+Varchar, 300
+Varchar, 300
+
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+Mandatory
+
+DiplomaName
+
+Varchar, 200
+
+Mandatory
+
+ForeignDiplomaResults
+
+Varchar, 400
+
+Mandatory
+
+DiplomaEquivalenceResults
+
+Varchar, 400
+
+Mandatory
+
+OtherQualifications
+EquivalenceDetermination
+
+Varchar, 300
+Varchar, 300
+
+Optional
+Mandatory
+
+Description
+academic certificate
+Applicant sex
+Nationality of the applicant
+Applicant’s year of birth
+Category of the qualifications used by
+the applicant to make application i.e.
+Direct or Equivalent
+Applicant’s email address
+Programme Code
+Programme name
+Form four foreign results
+Form four equivalence to Tanzanian's
+CSEE grading (Results)
+Diploma name as appeared on the
+diploma certificate
+Foreign Diploma results/GPA used for
+admission
+Diploma equivalence results
+(Grade/GPA)
+Any Other Qualifications used
+How the equivalence was determined
+
+AdmissionCriteria
+AdmissionStatus
+
+Varchar, 300
+Varchar, 128
+
+Mandatory
+Mandatory
+
+Criteria used for admission
+Applicant’s admission status
+
+(c) Response Parameters
+Name
+Direction
+Type
+
+TCU Information
+Output
+TCUInformationResponse
+Content type
+Component
+Type
+Body
+Response Body Section
+Contains elements
+The body of the response contains the information regarding the
+Applicant email address, status code and status description objects
+
+(d) Response Payload
+Attribute, Type & Length
+EmailAddress
+StatusCode
+StatusDescription
+
+Field Format
+Varchar, 128
+Varchar, 50
+Varchar, 128
+
+Description
+Email Address
+Service Status Code
+Description of Status Code
+
+104
+
+Example request
+<?xml version="1.0" encoding="UTF-8" ?>
+<Request>
+<UsernameToken>
+<Username>SXU</Username>
+<SessionToken> aTcuM3838jjKLMUOP0jL </SessionToken>
+</UsernameToken>
+<RequestParameters>
+<FirstName>MAKAME</FirstName>
+<SecondName>MAKAME</SecondName>
+<Surname>HAMZA</Surname>
+<Gender>M</Gender>
+<Nationality>Tanzanian</Nationality>
+<YearOfBirth>1994</YearOfBirth>
+<EmailAddress>axc@tcu.go.tz</EmailAddress>
+<ApplicantCategory>Equivalent</ApplicantCategory>
+<ProgrammeCode>SU001</ProgrammeCode>
+<ProgrammeName>Bachelor of Rural Development</ProgrammeName>
+<F4ForeignResults>Mathematics-A+, English Language-C, Chemistry-C
+</F4ForeignResults>
+<F4EquivalentResults> Mathematics-A, English Language-C, Chemistry-C
+</F4EquivalentResults>
+<DiplomaName> Diploma in Computer Application </DiplomaName>
+<ForeignDiplomaResults> First Class </ForeignDiplomaResults>
+<DiplomaEquivalenceResults> 4.5 </DiplomaEquivalenceResults>
+<OtherQualifications>N/A</OtherQualifications>
+<EquivalenceDetermination>Equivalence obtained from NACTVET
+</EquivalenceDetermination>
+<AdmissionCriteria> Students qualifications is equivalent to Ordinary Diploma in
+Tanzania </AdmissionCriteria>
+<AdmissionStatus> Admitted </AdmissionStatus>
+</RequestParameters>
+</Request>
+Example response
+<?xml version="1.0" encoding="utf-8”?>
+<Response>
+<ResponseParameters>
+<StatusCode>207</StatusCode>
+<EmailAddress>axc@tcu.go.tz</EmailAddress>
+<StatusDescription>Data was not successfully submitted to TCU. </StatusDescription>
+</ResponseParameters>
+</Response>
+
+105
+
+4. API Resources and Endpoints
+Resource
+
+End points
+
+Summary
+
+add
+
+Add a single or multiple
+applicant
+
+https://api.tcu.go.tz/applicants/add
+
+resubmit
+
+Resubmit Details for one
+or multiple applicants
+
+https://api.tcu.go.tz/applicants/resubmit
+
+Check admission Status
+of one or more
+Applicants during
+application phase
+Get the multiple/single
+admission status of a list
+of applicants per
+programme after
+selection
+Get a list of confirmed
+applicants per
+programme
+
+https://api.tcu.go.tz/applicants/checkStat
+us
+
+submitProgramme
+
+Submit Applicant
+Programme Choices
+
+https://api.tcu.go.tz/applicants/submitPr
+ogramme
+
+getApplicantVerifi
+cationStatus
+
+Get Applicant’s
+Verification Status
+
+https://api.tcu.go.tz/applicants/getApplic
+antVerificationStatus
+
+submitEnrolledStu
+dents
+
+Submit undergraduate
+enrolled/registered
+students
+
+https://api.tcu.go.tz/applicants/submitEn
+rolledStudents
+
+submitEnrolledPos
+tgraduateStudents
+
+Submit postgraduate
+enrolled/registered
+students
+
+https://api.tcu.go.tz/applicants/
+submitEnrolledPostgraduateStudents
+
+submitGraduates
+
+Submit graduates
+
+checkStatus
+
+getStatus
+
+getConfirmed
+
+Applicants
+
+submitInstitutionS
+taff
+getInternalTransfe
+rStatus
+getInterInstitution
+alTransferStatus
+restoreCancelledA
+dmission
+submitStudentsDr
+opOuts
+
+Submit Institution Staff
+Get verification status for
+internally transferred
+students
+Get verification status for
+inter-institutional
+transferred students
+Restore cancelled
+admission
+Submit students dropouts
+106
+
+url
+
+https://api.tcu.go.tz/applicants/getStatus
+
+https://api.tcu.go.tz/applicants/getConfir
+med
+
+https://api.tcu.go.tz/applicants/submitGr
+aduates
+https://api.tcu.go.tz/applicants/submitIns
+titutionStaff
+https://api.tcu.go.tz/applicants/getIntern
+alTransferStatus
+https://api.tcu.go.tz/applicants/getInterIn
+stitutionalTransferStatus
+https://api.tcu.go.tz/admission/restoreCa
+ncelledAdmission
+https://api.tcu.go.tz/applicants/submitStu
+dentsDropOuts
+
+Resource
+
+End points
+
+Summary
+
+url
+
+submitPostponedS
+tudents
+
+Submit students who
+postponed studies
+Submit admitted
+students into non-degree
+programmes
+Get verification status for
+non-degree admitted
+students
+
+https://api.tcu.go.tz/applicants/submitPo
+stponedStudents
+https://api.tcu.go.tz/applicants/submitAd
+mittedNonDegree
+
+submitAdmittedNo
+nDegree
+getNonDegreeAdm
+ittedStatus
+submitPostgraduat
+eApplicants
+
+Submit applicants
+applied for Postgraduate
+programmes
+
+submitAdmittedPo
+stgraduate
+
+Submit admitted
+students to Postgraduate
+programmes
+
+getPostgraduateAd
+mittedStatus
+
+submitPostgraduat
+eTransfers
+
+getPostgraduateTr
+ansferStatus
+
+submitForeignApp
+licants
+
+submitForeignAd
+mittedDirect
+
+submitForeignAd
+mittedEquivalent
+Admission
+
+confirm
+
+Get verification status for
+admitted students into
+Postgraduate
+programmes
+Submit transferred
+students from one
+Postgraduate
+programme to another
+within the same
+institution or from one
+institution to another
+Download transferred
+students into
+Postgraduate
+programmes and their
+verification status
+Add foreigners applied
+for admission into
+bachelor programmes in
+Tanzania
+Submit to the
+Commission the list of
+admitted foreigners into
+bachelor programmes
+under Direct Entry
+Submit to the
+Commission the list of
+admitted foreigners into
+bachelor programmes
+under Equivalent Entry
+Confirm Applicant
+107
+
+https://api.tcu.go.tz/applicants/getNonDe
+greeAdmittedStatus
+https://api.tcu.go.tz/applicants/submitPo
+stgraduateApplicants
+https://api.tcu.go.tz/applicants/submitAd
+mittedPostgraduate
+https://api.tcu.go.tz/applicants/getPostgr
+aduateAdmittedStatus
+https://api.tcu.go.tz/applicants/submitPo
+stgraduateTransfers
+
+https://api.tcu.go.tz/applicants/getPostgr
+aduateTransferStatus
+
+https://api.tcu.go.tz/applicants/submitFo
+reignApplicants
+
+https://api.tcu.go.tz/applicants/submitFo
+reignAdmittedDirect
+
+https://api.tcu.go.tz/applicants/
+submitForeignAdmittedEquivalent
+
+https://api.tcu.go.tz/admission/confirm
+
+Resource
+
+End points
+
+unconfirm
+getProgrammes
+getAdmitted
+
+Dashboard
+
+Summary
+Selections
+Unconfirm previous
+selection
+Get programmes with
+Admitted candidates
+Get admitted applicants
+per programme
+
+url
+https://api.tcu.go.tz/admission/unconfirm
+https://api.tcu.go.tz/admission/getProgra
+mmes
+https://api.tcu.go.tz/admission/getAdmitt
+ed
+
+reject
+
+Cancel/Reject admission
+
+https://api.tcu.go.tz/dashboard/reject
+
+requestConfirmati
+onCode
+
+Request confirmation
+code for multiple
+admission student
+
+https://api.tcu.go.tz/dashboard/requestC
+onfirmationCode
+
+Submit inter institutional
+transfers
+Submit internal transfers
+
+https://api.tcu.go.tz/admission/submitInt
+erInstitutionalTransfers
+https://api.tcu.go.tz/admission/submitInt
+ernalTransfers
+
+Populate Dashboard
+
+https://api.tcu.go.tz/dashboard/populate
+
+submitInterInstitu
+tionalTransfers
+submitInternalTra
+nsfers
+populate
+
+5. Message codes and their descriptions
+Code
+200
+201
+202
+203
+
+Message
+SUCCESSFUL
+PRIOR ADMISSION
+CLEAR
+ALREADY ADMITTED
+
+204
+
+SESSION TOKEN DOES NOT EXISTS
+
+205
+
+MALFORMED XML REQUEST
+
+Message Description
+Operation was performed successfully.
+Applicant record was found in prior admission list.
+Applicant has no prior admission.
+Applicant is already admitted in current admission
+cycle.
+The given session token does not exist in system,
+please contact system administrator.
+Invalid xml request.
+
+206
+
+EMPTY FORM FOUR INDEX NUMBER
+
+Form four index number cannot be null.
+
+207
+208
+
+OPERATION FAIL
+DUPLICATE RECORD
+
+Data was not successfully submitted to TCU.
+The applicant has already been submitted previously.
+
+209
+
+RE-SUBMITTED SUCCESSFUL
+
+210
+
+NOT FOUND
+
+The applicant has already been re-submitted
+previously.
+No record found
+
+211
+
+MANDATORY PARAMETERS
+
+Empty mandatory parameters
+
+212
+
+CONFIRMED SUCCESSFUL
+
+Applicant successfully confirmed
+
+213
+
+CONFIRM TO OTHER HLI
+
+Applicant has already confirmed to other institution
+
+214
+
+CONFIRM TO YOUR HLI
+
+Applicant has already confirmed to this institution
+
+215
+
+NO MULTIPLE ADMISSION
+
+The applicant has no multiple admission
+108
+
+Code
+216
+
+Message
+PROGRAMME CAPACITY IS FULL
+
+217
+
+INVALID CONFIRMATION CODE
+
+Message Description
+The programme capacity is full. No more
+confirmations are allowed
+Invalid confirmation code
+
+218
+
+U-CONFIRMED SUCCESSFULLY
+
+Un-confirmed successfully
+
+219
+
+OPERATION FAILED
+
+Failed to un-confirm the admission
+
+220
+
+NOT CONFIRMED
+
+221
+
+FAILED TO UN-CONFIRM
+
+222
+
+CONFIRMATION CODE SENT TO EMAIL
+
+223
+224
+
+CONFIRMATION CODE SENT TO EMAIL
+AND SMS
+NO ADMISSION FOUND
+
+The applicant has not confirmed admission to any
+institution
+Unable to un-confirm since the applicant has not
+confirmed to this institution
+Confirmation code has been sent to your email
+address.
+Confirmation code has been sent to your email
+address and mobile number.
+You have no admission to this institution
+
+225
+
+MULTIPLE ADMISSION
+
+The applicant has multiple admissions
+
+226
+
+SINGLE ADMISSION
+
+The applicant has single admission
+
+227
+
+OPERATION NOT ALLOWED
+
+Operation not allowed at the moment
+
+228
+
+NOT CANCELLED ADMISSION HERE
+
+229
+230
+
+NOT CANCELLED ADMISSION
+ANYWHERE
+ADMISSION RESTORED
+
+Applicant have not cancelled admission in this
+programme
+Applicant have not cancelled admission in any
+institution
+Applicant admission restored successfully
+
+231
+
+APPLICANT CLEARED
+
+Applicant cleared by the Commission
+
+232
+
+APPLICANT NOT CLEARED
+
+Applicant NOT cleared by the Commission
+
+233
+
+CONFIRMED ADMISSION IN THIS
+PROGRAMME
+CONFIRMED ADMISSION TO OTHER
+INSTITUTION
+
+Applicant confirmed in this programme
+
+234
+
+Applicant Confirmed to other HLI
+
+6. Automated Processes
+a. Send SMS/email to the Applicants
+●
+
+For each applicant with multiple admissions, send a SMS and/or email with
+a unique code that will be used for confirming the selection with one of the
+HEIs.
+
+●
+
+Message components: Form4indexno, confirmation code, deadline of
+confirmation and directive to confirm with one HLI only.
+109
+
+●
+
+The applicant will use the received code to initiate the confirmation via the
+HEIs online system. The Online system will make a call to the Confirm
+Selection API defined under 3.4 above
+
+●
+
+The confirmation code should also be sent via email to each applicant with
+multiple admissions
+
+●
+
+In HLI systems Mobile number and email address should be
+MANDATORY fields for each applicant during the application phase.
+
+b. Broadcast admission status
+For each applicant, TCU shall notify the HEIs (PUSH) of the final admission status.
+The following are possible statuses that can be communicated:
+o clear admission
+o multiple admissions
+o unqualified
+o name mismatch
+o prior admission
+●
+●
+●
+
+HEIs will populate their systems and allow students to get the necessary
+feedback;
+TCU should also provide an alternative for HEIs to download their own lists
+of applicants with their admission status for further processing;
+Alternatively, HEIs can PULL the lists via an API defined above under 3.10.
+
+7. APIs and/or Processes on HEIs' Online Systems
+7.1 Check Status
+Check the status of an applicant (eligibility for application)
+7.2 Get Admission Status
+Download the admission status of all applicants in a programme
+7.3 Populate Dashboard
+Upload summary of applications for statistical purposes
+7.4 Add Applicant(s)
+Upload applicants’ f4indexno and f6indexno
+7.5 Submit Applicant Programme
+PUSH applicants with their selected programmes, programme admitted to
+and contact details
+7.6 Resubmit Applicant(s)
+PUSH applicants whose details have changed since last submission
+110
+
+7.7 Get Applicant Status
+Fetch a list of all applicants in a given programme
+7.8 Get a list of confirmed applicants
+PULL a list of confirmed applicants (from those with multiple admissions)
+7.9 Confirm Admission
+PUSH to TCU special confirmation code entered by applicants with multiple
+admissions
+7.10
+
+Unconfirm Admission
+PUSH to TCU applicants who chose to reject their admission
+
+7.11
+
+Request Confirmation Code
+PUSH to TCU applicant who request to confirmation code.
+
+7.12
+
+Cancel/ Reject Admission
+PUSH to TCU applicant who request to cancel/reject his admission at your
+institution.
+
+7.13
+
+Submit inter institutional transfers
+PUSH to TCU applicant who request to transfer from another institution to
+tour institution.
+
+7.14
+
+Submit internal transfers
+PUSH to TCU applicant who request to transfer from one programme to
+another within your institution.
+
+7.15
+
+Get Applicant’s Verification Status
+PULL the list of applicants with their status after TCU verification per
+programme
+
+7.16
+
+Get Programmes
+PULL a list of programme codes for programmes with selected applicants.
+
+7.17
+
+Submit undergraduate enrolled/registered students
+Submit to TCU the list of registered/enrolled students into undergraduate
+programmes in the academic year.
+
+7.18
+
+Submit graduates
+Submit to TCU the list of graduates in the graduation year. This endpoint is
+used to submit graduates for all programmes from Certificate to PhD from
+university institutions and Bachelor and Postgraduate graduates from NonUniversity institutions.
+
+7.19
+
+Submit Institution Staff
+Submit to TCU the list of both academic and administrative staff
+
+7.20
+
+Get verification status for internally transferred students
+Download applicants who have requested for internal transfers and their
+TCU verification status
+111
+
+7.21
+
+Get verification status for inter-institutional transferred students
+Download applicants who have requested inter-institutional (from one
+institution to another) transfers and their TCU verification status
+
+7.22
+
+Restore cancelled admission
+Restore admission for applicants who previously cancelled their admissions
+
+7.23
+
+Submit students drop-outs
+Add/Submit to TCU students who dropped their studies
+
+7.24
+
+Submit students who postponed studies
+Submit/add students who postponed studies in the current academic year
+
+7.25
+
+Submit admitted students into non-degree programmes
+Add students admitted into non-degree programmes (Certificates, Diplomas
+or Foundation Programme)
+
+7.26
+
+Get verification status for non-degree admitted students
+Download admitted students into non-degree programmes and their
+verification statuses
+
+7.27
+
+Submit applicants applied for Postgraduate programmes
+Submit to TCU the list of applicants applied for Postgraduate programmes in
+University institutions
+
+7.28
+
+Submit admitted students into Postgraduate programmes
+Submit to TCU the list of admitted students into Postgraduate programmes
+in University institutions
+
+7.29
+
+Get verification status for admitted students into Postgraduate programmes
+Download admitted students into Postgraduate programmes and their
+verification statuses
+
+7.30
+
+Submit transferred students from one Postgraduate programme to
+another within the same institution or from one institution to another
+Submit to TCU the list of admitted students into Postgraduate programmes
+in University institutions
+
+7.31
+
+Get verification status for transferred students into Postgraduate programmes
+Download transferred students into Postgraduate programmes and their
+verification status
+
+7.32
+
+Submit postgraduate enrolled/registered students
+Submit to TCU the list of registered/enrolled students into postgraduate
+programmes in the academic year.
+
+7.33
+
+Submit foreign applicants applied for admissions into bachelor degree
+programmes
+Submit the list of foreigners applied for bachelor degree programmes in
+Tanzania institutions.
+112
+
+7.34
+
+Submit admitted foreigners into bachelor's degree programmes under
+Direct Entry
+Submit the list of foreigners admitted into bachelor's degree programmes in
+Tanzania institutions under Direct Entry.
+
+7.35
+
+Submit admitted foreigners into bachelor's degree programmes under
+Equivalent Entry
+Submit the list of foreigners admitted into bachelor's degree programmes in
+Tanzania institutions under Equivalent Entry.
+
+8. Contact Details
+In case of any enquiries, please contact TCU Technical Team through the email es@tcu.go.tz
+or ict@tcu.go.tz and phone number +255 (0) 22 2113691
+
+113
+
+
